@@ -22,7 +22,7 @@ module.exports = {
   devServer: {
     contentBase: './build',
     inline: true,
-    hot: true,
+    hot: true
   },
   resolve: {
     extensions: ['*', '.js', '.json', '.jsx', '.css', '.scss'],
