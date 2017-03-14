@@ -10,6 +10,7 @@ app.use(express.static('build'))
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Jet Fuel'
+app.locals.folders = [];
 
 app.get('/', (request, response) => {
   fs.readFile(`${__dirname}/index.html`, (err, file) => {
@@ -17,16 +18,6 @@ app.get('/', (request, response) => {
  })
 })
 
-app.get('/api/folders', (request, response) => {
-  const folders = app.locals.folders
-
-  response.json({ folders })
-})
-
-app.post('/folders', (request, response) => {
-    const id = Date.now()
-    response.json({ id })
-});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
