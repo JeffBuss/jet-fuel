@@ -1,14 +1,26 @@
-const http = require("http");
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
 
-const server = http.createServer()
 
-server.listen(3000, 'localhost');
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static('build'))
 
-let counter = 0;
 
-server.on('request', (request, response) => {
-  response.writeHead(200, { "Content-Type": 'text/plain' });
-  response.write("Hello World\n");
-  response.write(`This is Request #${++counter}.`);
-  response.end();
-});
+app.set('port', process.env.PORT || 3000)
+app.locals.title = 'Jet Fuel'
+
+app.get('/', (request, response) => {
+  fs.readFile(`${__dirname}/index.html`, (err, file) => {
+   response.send(file)
+})
+})
+
+// app.post('/test', function (req, res) {
+//     console.log('works');
+// });
+
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`)
+})
