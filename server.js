@@ -14,12 +14,19 @@ app.locals.title = 'Jet Fuel'
 app.get('/', (request, response) => {
   fs.readFile(`${__dirname}/index.html`, (err, file) => {
    response.send(file)
-})
+ })
 })
 
-// app.post('/test', function (req, res) {
-//     console.log('works');
-// });
+app.get('/api/folders', (request, response) => {
+  const folders = app.locals.folders
+
+  response.json({ folders })
+})
+
+app.post('/folders', (request, response) => {
+    const id = Date.now()
+    response.json({ id })
+});
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)

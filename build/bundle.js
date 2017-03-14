@@ -2496,11 +2496,18 @@ module.exports = g;
 __webpack_require__(0);
 
 var urlBtn = $('.url-btn');
+var folderBtn = $('.folder-btn');
 
 urlBtn.on('click', function () {
   event.preventDefault();
-  console.log('click');
-  // $.post('/test')
+  var input = $('.url-input').val();
+  $('.url-list').append('<p>' + input + '<p>');
+});
+
+folderBtn.on('click', function () {
+  event.preventDefault();
+  var input = $('.folder-input').val();
+  $('.url-folder').append('<p>' + input + '<p>');
 });
 
 /***/ })
