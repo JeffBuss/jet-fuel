@@ -2,13 +2,40 @@
 <html>
   <head>
     <title>Jet Fuel</title>
-    <!-- <link rel="stylesheet" type="text/css" href="reset.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="../public/styles.scss"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=true;">
   </head>
   <body id='body'>
-    <div>it ff </div>
+    <header class='header'>
+      <h1 class='title'>Jet Fuel</h1>
+    </header>
+    <div class='main-section'>
+      <section class='folder-section'>
+        <form class='folder-form'>
+          <label>Add a folder</label>
+          <input class='input folder-input'></input>
+          <button class='btn folder-btn'>New Folder</button>
+        </form>
+        <ul class='url-folder'>
+          <li class='folder-title'>Sample Folder</li>
+          <li class='folder-title'>Sample Folder</li>
+          <li class='folder-title'>Sample Folder</li>
+          <li class='folder-title'>Sample Folder</li>
+        </ul>
+      </section>
+      <section class='url-section'>
+        <form class='url-form'>
+          <label>Add a url</label>
+          <input class='input url-input'></input>
+          <button class='btn url-btn'>New Folder</button>
+        </form>
+        <ul class='url-list'>
+          <li class='url-title'>Sample URL</li>
+          <li class='url-title'>Sample URL</li>
+          <li class='url-title'>Sample URL</li>
+          <li class='url-title'>Sample URL</li>
+        </ul>
+      </section>
+    </div>
   </body>
   <script src='/bundle.js'></script>
-  <!-- <script src='server.js'></script> -->
 </html>
