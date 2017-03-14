@@ -25,8 +25,9 @@ app.get('/api/folders', (request, response) => {
 
 app.post('/api/folders', (request, response) => {
   const id = Date.now()
-  app.locals.folders.push(id)
-  response.json({ id })
+  const folderName = request.body.folderName
+  app.locals.folders.push(id, folderName)
+  response.json({ id , folderName})
 })
 
 app.listen(app.get('port'), () => {

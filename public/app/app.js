@@ -16,7 +16,10 @@ const saveFolder = (input) => {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
-    }
+    },
+    body: JSON.stringify({
+      folderName: input,
+    })
   })
   .then(response => response.json())
   .then(response => console.log(response))

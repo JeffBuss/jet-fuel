@@ -2509,7 +2509,10 @@ var saveFolder = function saveFolder(input) {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
-    }
+    },
+    body: JSON.stringify({
+      folderName: input
+    })
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
