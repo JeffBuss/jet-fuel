@@ -1,0 +1,39 @@
+$sansFont: 'Roboto', sans-serif;
+$lightBG: #fafafa;
+$medBG: #bababa;
+$darkBG: #5a5a5a;
+$primaryLight: #1abc9c;
+$primaryDark: #16a085;
+
+@mixin buttonStyles {
+  &:hover {
+        background-color: $primaryDark;
+        cursor: pointer;
+        box-shadow: 5px 5px 5px rgba(0,0,0,0.7);
+    }
+    &:disabled {
+      cursor: default;
+      color: white;
+      background-color: grey;
+      box-shadow: none;
+    }
+  &:focus{
+    outline: none;
+  }
+  background-color: $primaryLight;
+  border-radius: 5px;
+  border-style: none;
+  margin: .5vw;
+  height: 30px;
+}
+
+@mixin inputStyles {
+  margin: .5vw;
+  border-radius: 5px;
+  border: 2px solid $medBG;
+  height: 3vh;
+  &:focus{
+    border: 2px solid $primaryLight;
+    outline: none;
+  }
+}

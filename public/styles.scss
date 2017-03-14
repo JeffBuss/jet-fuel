@@ -1,3 +1,46 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+@import './variables.scss';
+
 body {
-  background-color: #fafafa;
+  background-color: $lightBG;
+  font-family: $sansFont;
+}
+
+.btn {
+  @include buttonStyles;
+}
+
+.input {
+  @include inputStyles;
+  max-width: 90%;
+}
+
+.header {
+  border: 2px solid $primaryDark;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+}
+
+.main-section {
+  display: flex;
+  flex-direction: row;
+}
+
+.folder-section {
+  border: 2px solid $primaryDark;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+  width: 25%;
+  left: 0;
+}
+
+.url-section {
+  border: 2px solid $primaryDark;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+  width: 75%;
+  right: 0;
 }
