@@ -18,6 +18,10 @@ app.get('/', (request, response) => {
  })
 })
 
+app.get('/api/folders', (request, response) => {
+  const folders = app.locals.folders
+  response.json({folders})
+})
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
