@@ -12,7 +12,14 @@ urlBtn.on('click', () => {
 })
 
 const saveFolder = (input) => {
-  console.log(input)
+  fetch('http://localhost:3000/api/folders', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    }
+  })
+  .then(response => response.json())
+  .then(response => console.log(response))
 }
 
 folderBtn.on('click', () => {

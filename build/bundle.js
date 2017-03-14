@@ -2505,7 +2505,16 @@ urlBtn.on('click', function () {
 });
 
 var saveFolder = function saveFolder(input) {
-  console.log(input);
+  fetch('http://localhost:3000/api/folders', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log(response);
+  });
 };
 
 folderBtn.on('click', function () {
