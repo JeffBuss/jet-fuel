@@ -2504,10 +2504,15 @@ urlBtn.on('click', function () {
   $('.url-list').append('<p>' + input + '<p>');
 });
 
+var saveFolder = function saveFolder(input) {
+  console.log(input);
+};
+
 folderBtn.on('click', function () {
   event.preventDefault();
   var input = $('.folder-input').val();
   $('.url-folder').append('<p>' + input + '<p>');
+  saveFolder(input);
 });
 
 /***/ })

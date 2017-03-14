@@ -20,7 +20,13 @@ app.get('/', (request, response) => {
 
 app.get('/api/folders', (request, response) => {
   const folders = app.locals.folders
-  response.json({folders})
+  response.json({ folders })
+})
+
+app.post('/api/folders', (request, response) => {
+  const id = Date.now()
+  app.locals.folders.push(id)
+  response.json({ id })
 })
 
 app.listen(app.get('port'), () => {

@@ -11,10 +11,15 @@ urlBtn.on('click', () => {
   )
 })
 
+const saveFolder = (input) => {
+  console.log(input)
+}
+
 folderBtn.on('click', () => {
   event.preventDefault()
   let input = $('.folder-input').val()
   $('.url-folder').append(
     `<p>${input}<p>`
   )
+  saveFolder(input)
 })
