@@ -2496,11 +2496,40 @@ module.exports = g;
 __webpack_require__(0);
 
 var urlBtn = $('.url-btn');
+var folderBtn = $('.folder-btn');
+
+var pushURL = function pushURL(input) {
+  console.log(input);
+};
 
 urlBtn.on('click', function () {
   event.preventDefault();
-  console.log('click');
-  // $.post('/test')
+  var input = $('.url-input').val();
+  $('.url-list').append('<p>' + input + '<p>');
+  pushURL(input);
+});
+
+var saveFolder = function saveFolder(input) {
+  fetch('http://localhost:3000/api/folders', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      folderName: input
+    })
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log(response);
+  });
+};
+
+folderBtn.on('click', function () {
+  event.preventDefault();
+  var input = $('.folder-input').val();
+  $('.url-folder').append('<li class=\'' + input + '\'>' + input + '</li>');
+  saveFolder(input);
 });
 
 /***/ })
