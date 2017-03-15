@@ -2498,6 +2498,7 @@ __webpack_require__(0);
 var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
+var currentFolder = undefined;
 
 folderBtn.on('click', function (arr) {
   event.preventDefault();
@@ -2506,21 +2507,6 @@ folderBtn.on('click', function (arr) {
   clearFolders();
   loadFolders();
 });
-
-var loadFolders = function loadFolders() {
-  fetch('http://localhost:3000/api/folders', {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-    }
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    return displayFolders(response);
-  });
-};
-
-loadFolders();
 
 var saveFolder = function saveFolder(input) {
   fetch('http://localhost:3000/api/folders', {
@@ -2542,20 +2528,37 @@ var clearFolders = function clearFolders() {
   $('.url-folder').empty();
 };
 
+var loadFolders = function loadFolders() {
+  fetch('http://localhost:3000/api/folders', {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return displayFolders(response);
+  });
+};
+
+loadFolders();
+
 var displayFolders = function displayFolders(arr) {
   arr.folders.map(function (el) {
+    var folderId = el.id;
     $('.url-folder').append('<li class=\'' + el.folderName + '\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
   });
 };
 
-var pushURL = function pushURL(input) {
+var pushURL = function pushURL(input, folderId) {
   fetch('http://localhost:3000/api/urls', {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      urlName: input
+      urlName: input,
+      folderId: folderId
     })
   }).then(function (response) {
     return response.json();
@@ -2572,8 +2575,10 @@ urlBtn.on('click', function () {
 });
 
 $('.url-folder').on('click', 'li', function (e) {
-
-  console.log(e.target.id);
+  var folderId = e.target.id;
+  var currentFolder = e.target.id;
+  console.log(e.target);
+  // pushURL(folderId)
 });
 
 /***/ })
