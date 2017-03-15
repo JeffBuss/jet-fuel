@@ -3,6 +3,27 @@ require ('../styles.scss');
 const urlBtn = $('.url-btn')
 const folderBtn = $('.folder-btn')
 
+const loadFolders = () => {
+  fetch('http://localhost:3000/api/folders', {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(response => displayFolders(response))
+}
+
+loadFolders()
+
+const displayFolders = (arr) => {
+  arr.folders.map((el) => {
+    $('.url-folder').append(
+      `<li class='${el.folderName}'>${el.folderName}</li>`
+    )
+  })
+}
+
 const pushURL = (input) => {
   fetch('http://localhost:3000/api/urls', {
     method: 'POST',
@@ -14,7 +35,7 @@ const pushURL = (input) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log(response))
+  .then(response => console.log('push url', response))
 }
 
 urlBtn.on('click', () => {
@@ -37,7 +58,7 @@ const saveFolder = (input) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log(response))
+  .then(response => console.log('push folder', response))
 }
 
 folderBtn.on('click', () => {
