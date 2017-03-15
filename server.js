@@ -11,6 +11,7 @@ app.use(express.static('build'))
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Jet Fuel'
 app.locals.folders = [];
+app.locals.urls = [];
 
 app.get('/', (request, response) => {
   fs.readFile(`${__dirname}/index.html`, (err, file) => {
@@ -28,6 +29,13 @@ app.post('/api/folders', (request, response) => {
   const folderName = request.body.folderName
   app.locals.folders.push({id, folderName})
   response.json({ id , folderName})
+})
+
+app.post('/api/urls', (request, response) => {
+  const id = Date.now()
+  const urlName = request.body.urlName
+  app.locals.urls.push({ id, urlName })
+  response.json({ id, urlName })
 })
 
 app.listen(app.get('port'), () => {
