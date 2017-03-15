@@ -37,10 +37,11 @@ app.post('/api/folders', (request, response) => {
 })
 
 app.post('/api/urls', (request, response) => {
-  const id = Date.now()
+  const id = ''
   const urlName = request.body.urlName
-  app.locals.urls.push({ id, urlName })
-  response.json({ id, urlName })
+  const folderId = request.body.folderId
+  app.locals.urls.push({ id, urlName, folderId })
+  response.json({ id, urlName, folderId })
 })
 
 app.listen(app.get('port'), () => {
