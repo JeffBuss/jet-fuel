@@ -2498,6 +2498,27 @@ __webpack_require__(0);
 var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
 
+var loadFolders = function loadFolders() {
+  fetch('http://localhost:3000/api/folders', {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return displayFolders(response);
+  });
+};
+
+loadFolders();
+
+var displayFolders = function displayFolders(arr) {
+  arr.folders.map(function (el) {
+    $('.url-folder').append('<li class=\'' + el.folderName + '\'>' + el.folderName + '</li>');
+  });
+};
+
 var pushURL = function pushURL(input) {
   fetch('http://localhost:3000/api/urls', {
     method: 'POST',
@@ -2510,7 +2531,7 @@ var pushURL = function pushURL(input) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    return console.log(response);
+    return console.log('push url', response);
   });
 };
 
@@ -2533,7 +2554,7 @@ var saveFolder = function saveFolder(input) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    return console.log(response);
+    return console.log('push folder', response);
   });
 };
 
