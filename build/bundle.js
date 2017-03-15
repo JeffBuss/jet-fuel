@@ -2499,7 +2499,19 @@ var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
 
 var pushURL = function pushURL(input) {
-  console.log(input);
+  fetch('http://localhost:3000/api/urls', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      urlName: input
+    })
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log(response);
+  });
 };
 
 urlBtn.on('click', function () {

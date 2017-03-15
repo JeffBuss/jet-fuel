@@ -4,7 +4,17 @@ const urlBtn = $('.url-btn')
 const folderBtn = $('.folder-btn')
 
 const pushURL = (input) => {
-  console.log(input)
+  fetch('http://localhost:3000/api/urls', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      urlName: input,
+    })
+  })
+  .then(response => response.json())
+  .then(response => console.log(response))
 }
 
 urlBtn.on('click', () => {
