@@ -24,6 +24,11 @@ app.get('/api/folders', (request, response) => {
   response.json({ folders })
 })
 
+app.get('/api/urls', (request, response) => {
+  const urls = app.locals.urls
+  response.json({ urls })
+})
+
 app.post('/api/folders', (request, response) => {
   const id = Date.now()
   const folderName = request.body.folderName
