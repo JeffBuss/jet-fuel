@@ -14,7 +14,6 @@ folderBtn.on('click', (arr) => {
   loadFolders()
 })
 
-
 const saveFolder = (input) => {
   fetch('http://localhost:3000/api/folders', {
     method: 'POST',
@@ -45,10 +44,8 @@ const loadFolders = () => {
 }
 
 $('.url-folder').on('click', 'li', (e) => {
-  const folderId = e.target.id
   currentFolder = e.target.id
-  console.log(currentFolder)
-  // pushURL(folderId)
+  console.log('currentFolderID', currentFolder)
 })
 
 urlBtn.on('click', () => {
@@ -58,7 +55,6 @@ urlBtn.on('click', () => {
     `<p className='$currentFolder'>${input}<p>`
   )
   pushURL(input)
-  console.log(currentFolder);
 })
 
 loadFolders()
