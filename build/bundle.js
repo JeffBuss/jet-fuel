@@ -2498,6 +2498,7 @@ __webpack_require__(0);
 var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
+
 var currentFolder = undefined;
 
 folderBtn.on('click', function (arr) {
@@ -2541,6 +2542,21 @@ var loadFolders = function loadFolders() {
   });
 };
 
+$('.url-folder').on('click', 'li', function (e) {
+  var folderId = e.target.id;
+  currentFolder = e.target.id;
+  console.log(currentFolder);
+  // pushURL(folderId)
+});
+
+urlBtn.on('click', function () {
+  event.preventDefault();
+  var input = $('.url-input').val();
+  $('.url-list').append('<p className=\'$currentFolder\'>' + input + '<p>');
+  pushURL(input);
+  console.log(currentFolder);
+});
+
 loadFolders();
 
 var displayFolders = function displayFolders(arr) {
@@ -2558,7 +2574,7 @@ var pushURL = function pushURL(input, folderId) {
     },
     body: JSON.stringify({
       urlName: input,
-      folderId: folderId
+      folderId: currentFolder
     })
   }).then(function (response) {
     return response.json();
@@ -2566,20 +2582,6 @@ var pushURL = function pushURL(input, folderId) {
     return console.log('push url', response);
   });
 };
-
-urlBtn.on('click', function () {
-  event.preventDefault();
-  var input = $('.url-input').val();
-  $('.url-list').append('<p>' + input + '<p>');
-  pushURL(input);
-});
-
-$('.url-folder').on('click', 'li', function (e) {
-  var folderId = e.target.id;
-  var currentFolder = e.target.id;
-  console.log(e.target);
-  // pushURL(folderId)
-});
 
 /***/ })
 /******/ ]);

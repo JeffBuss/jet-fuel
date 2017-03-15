@@ -3,7 +3,8 @@ require ('../styles.scss');
 const urlBtn = $('.url-btn')
 const folderBtn = $('.folder-btn')
 const folderList = $('.folder-list')
-const currentFolder = undefined
+
+let currentFolder = undefined
 
 folderBtn.on('click', (arr) => {
   event.preventDefault()
@@ -12,6 +13,7 @@ folderBtn.on('click', (arr) => {
   clearFolders()
   loadFolders()
 })
+
 
 const saveFolder = (input) => {
   fetch('http://localhost:3000/api/folders', {
@@ -42,6 +44,23 @@ const loadFolders = () => {
   .then(response => displayFolders(response))
 }
 
+$('.url-folder').on('click', 'li', (e) => {
+  const folderId = e.target.id
+  currentFolder = e.target.id
+  console.log(currentFolder)
+  // pushURL(folderId)
+})
+
+urlBtn.on('click', () => {
+  event.preventDefault()
+  let input = $('.url-input').val()
+  $('.url-list').append(
+    `<p className='$currentFolder'>${input}<p>`
+  )
+  pushURL(input)
+  console.log(currentFolder);
+})
+
 loadFolders()
 
 const displayFolders = (arr) => {
@@ -61,25 +80,9 @@ const pushURL = (input, folderId) => {
     },
     body: JSON.stringify({
       urlName: input,
-      folderId: folderId,
+      folderId: currentFolder,
     })
   })
   .then(response => response.json())
   .then(response => console.log('push url', response))
 }
-
-urlBtn.on('click', () => {
-  event.preventDefault()
-  let input = $('.url-input').val()
-  $('.url-list').append(
-    `<p>${input}<p>`
-  )
-  pushURL(input)
-})
-
-$('.url-folder').on('click', 'li', (e) => {
-  const folderId = e.target.id
-  const currentFolder = e.target.id
-  console.log(e.target)
-  // pushURL(folderId)
-})
