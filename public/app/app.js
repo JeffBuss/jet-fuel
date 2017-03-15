@@ -45,7 +45,7 @@ const loadFolders = () => {
 }
 
 $('.url-folder').on('click', 'li', (e) => {
-  const folderId = e.target.id
+  // const folderId = e.target.id
   currentFolder = e.target.id
   console.log(currentFolder)
   // pushURL(folderId)
@@ -86,3 +86,25 @@ const pushURL = (input, folderId) => {
   .then(response => response.json())
   .then(response => console.log('push url', response))
 }
+
+const displayUrls = (arr) => {
+  arr.urls.map((el) => {
+    // const folderId = el.id
+    $('.url-list').append(
+      `<li class='${el.urlName}' id='${el.id}'>${el.urlName}</li>`
+    )
+  })
+}
+
+const loadUrls = () => {
+  fetch('http://localhost:3000/api/urls', {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(response => displayUrls(response))
+}
+
+loadUrls()
