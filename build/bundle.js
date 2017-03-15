@@ -2498,10 +2498,15 @@ __webpack_require__(0);
 var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
 
+var pushURL = function pushURL(input) {
+  console.log(input);
+};
+
 urlBtn.on('click', function () {
   event.preventDefault();
   var input = $('.url-input').val();
   $('.url-list').append('<p>' + input + '<p>');
+  pushURL(input);
 });
 
 var saveFolder = function saveFolder(input) {
@@ -2523,7 +2528,7 @@ var saveFolder = function saveFolder(input) {
 folderBtn.on('click', function () {
   event.preventDefault();
   var input = $('.folder-input').val();
-  $('.url-folder').append('<p>' + input + '<p>');
+  $('.url-folder').append('<li class=\'' + input + '\'>' + input + '</li>');
   saveFolder(input);
 });
 
