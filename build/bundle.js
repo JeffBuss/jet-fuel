@@ -2497,6 +2497,15 @@ __webpack_require__(0);
 
 var urlBtn = $('.url-btn');
 var folderBtn = $('.folder-btn');
+var folderList = $('.folder-list');
+
+folderBtn.on('click', function (arr) {
+  event.preventDefault();
+  var input = $('.folder-input').val();
+  saveFolder(input);
+  clearFolders();
+  loadFolders();
+});
 
 var loadFolders = function loadFolders() {
   fetch('http://localhost:3000/api/folders', {
@@ -2513,9 +2522,29 @@ var loadFolders = function loadFolders() {
 
 loadFolders();
 
+var saveFolder = function saveFolder(input) {
+  fetch('http://localhost:3000/api/folders', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      folderName: input
+    })
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log('push folder', response);
+  });
+};
+
+var clearFolders = function clearFolders() {
+  $('.url-folder').empty();
+};
+
 var displayFolders = function displayFolders(arr) {
   arr.folders.map(function (el) {
-    $('.url-folder').append('<li class=\'' + el.folderName + '\'>' + el.folderName + '</li>');
+    $('.url-folder').append('<li class=\'' + el.folderName + '\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
   });
 };
 
@@ -2542,27 +2571,9 @@ urlBtn.on('click', function () {
   pushURL(input);
 });
 
-var saveFolder = function saveFolder(input) {
-  fetch('http://localhost:3000/api/folders', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      folderName: input
-    })
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    return console.log('push folder', response);
-  });
-};
+$('.url-folder').on('click', 'li', function (e) {
 
-folderBtn.on('click', function () {
-  event.preventDefault();
-  var input = $('.folder-input').val();
-  $('.url-folder').append('<li class=\'' + input + '\'>' + input + '</li>');
-  saveFolder(input);
+  console.log(e.target.id);
 });
 
 /***/ })
