@@ -7,7 +7,7 @@ const folderList = $('.folder-list')
 
 let currentFolder = undefined
 
-folderBtn.on('click', (arr) => {
+folderBtn.on('click', (event) => {
   event.preventDefault()
   let input = $('.folder-input').val()
   saveFolder(input)
@@ -47,14 +47,14 @@ loadFolders()
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
     if(currentFolder) {
-      fetch('http://localhost:3000/api/folders/' + currentFolder, {
+      fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
         }
       })
       .then(response => response.json())
-      .then(response => displayUrls(response.filteredUrls))
+      .then(response => displayUrls(response))
     }
 })
 
@@ -66,8 +66,8 @@ urlBtn.on('click', () => {
 })
 
 
-const displayFolders = (arr) => {
-  arr.folders.map((el) => {
+const displayFolders = (folders) => {
+  folders.map((el) => {
     $('.url-folder').append(
       `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
     )
@@ -75,7 +75,7 @@ const displayFolders = (arr) => {
 }
 
 const pushURL = (input) => {
-  fetch('http://localhost:3000/api/folders/' + currentFolder, {
+  fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -93,11 +93,10 @@ const pushURL = (input) => {
   })
 }
 
-const displayUrls = (arr) => {
-  console.log('arr', arr);
+const displayUrls = (folders) => {
   clearUrls()
-  if(arr) {
-    arr.map((el) => {
+  if(folders) {
+    folders.map((el) => {
       console.log('el?', el)
       $('.url-list').append(
         `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.urlName}</a></li>`
@@ -112,7 +111,7 @@ const clearUrls = () => {
 
 const loadUrls = () => {
   if(currentFolder){
-    fetch('http://localhost:3000/api/folders/' + currentFolder, {
+    fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
