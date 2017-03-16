@@ -14,7 +14,6 @@ folderBtn.on('click', (arr) => {
   loadFolders()
 })
 
-
 const saveFolder = (input) => {
   fetch('http://localhost:3000/api/folders', {
     method: 'POST',
@@ -45,27 +44,26 @@ const loadFolders = () => {
 }
 
 $('.url-folder').on('click', 'li', (e) => {
-  // const folderId = e.target.id
   currentFolder = e.target.id
   console.log(currentFolder)
-  // pushURL(folderId)
 })
 
 urlBtn.on('click', () => {
   event.preventDefault()
   let input = $('.url-input').val()
-  $('.url-list').append(
-    `<p className='$currentFolder'>${input}<p>`
-  )
+  // $('.url-list').append(
+  //   `<p className='$currentFolder'>${input}<p>`
+  // )
   pushURL(input)
   console.log(currentFolder);
+  clearUrls()
+  loadUrls()
 })
 
 loadFolders()
 
 const displayFolders = (arr) => {
   arr.folders.map((el) => {
-    const folderId = el.id
     $('.url-folder').append(
       `<li class='${el.folderName}' id='${el.id}'>${el.folderName}</li>`
     )
@@ -81,6 +79,7 @@ const pushURL = (input, folderId) => {
     body: JSON.stringify({
       urlName: input,
       folderId: currentFolder,
+      id: 5,
     })
   })
   .then(response => response.json())
@@ -89,11 +88,14 @@ const pushURL = (input, folderId) => {
 
 const displayUrls = (arr) => {
   arr.urls.map((el) => {
-    // const folderId = el.id
     $('.url-list').append(
-      `<li class='${el.urlName}' id='${el.id}'>${el.urlName}</li>`
+      `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
     )
   })
+}
+
+const clearUrls = () => {
+  $('.url-list').empty();
 }
 
 const loadUrls = () => {

@@ -2,11 +2,9 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 
-
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('build'))
-
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Jet Fuel'
@@ -37,7 +35,7 @@ app.post('/api/folders', (request, response) => {
 })
 
 app.post('/api/urls', (request, response) => {
-  const id = ''
+  const id = request.body.id
   const urlName = request.body.urlName
   const folderId = request.body.folderId
   app.locals.urls.push({ id, urlName, folderId })
