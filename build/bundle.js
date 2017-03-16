@@ -2544,21 +2544,24 @@ var loadFolders = function loadFolders() {
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
-  console.log('currentFolderID', currentFolder);
 });
 
 urlBtn.on('click', function () {
   event.preventDefault();
   var input = $('.url-input').val();
-  $('.url-list').append('<p className=\'$currentFolder\'>' + input + '<p>');
+  // $('.url-list').append(
+  //   `<p className='$currentFolder'>${input}<p>`
+  // )
   pushURL(input);
+  console.log(currentFolder);
+  clearUrls();
+  loadUrls();
 });
 
 loadFolders();
 
 var displayFolders = function displayFolders(arr) {
   arr.folders.map(function (el) {
-    var folderId = el.id;
     $('.url-folder').append('<li class=\'' + el.folderName + '\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
   });
 };
@@ -2571,7 +2574,8 @@ var pushURL = function pushURL(input, folderId) {
     },
     body: JSON.stringify({
       urlName: input,
-      folderId: currentFolder
+      folderId: currentFolder,
+      id: 5
     })
   }).then(function (response) {
     return response.json();
@@ -2582,9 +2586,12 @@ var pushURL = function pushURL(input, folderId) {
 
 var displayUrls = function displayUrls(arr) {
   arr.urls.map(function (el) {
-    // const folderId = el.id
-    $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'>' + el.urlName + '</li>');
+    $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
   });
+};
+
+var clearUrls = function clearUrls() {
+  $('.url-list').empty();
 };
 
 var loadUrls = function loadUrls() {
