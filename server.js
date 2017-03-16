@@ -32,15 +32,21 @@ app.get('/api/folders', (request, response) => {
     })
 })
 
-// app.get('/api/urls', (request, response) => {
-//   database('urls').select()
-//     .then((urls) => {
-//       response.status(200).json(urls);
-//     })
-//     .catch((error) => {
-//       console.error('error stuff shit team');
-//     })
-// })
+app.post('/api/folders', (request, response) => {
+  const folderName = request.body.folderName
+  const folders = { folderName }
+  database('folders').insert(folders)
+  .then((folders) => {
+    database('folders').select()
+      .then((folders) => {
+        response.status(200).json(folders)
+      })
+      .catch((error) => {
+        console.log('something is wrong w db (folders)')
+  })
+  })
+})
+
 app.get('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
     database('urls').where('folderId', folderId).select()
@@ -54,28 +60,21 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
 
 app.post('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
+  const urlName = request.body.urlName
   const date = Date.now()
-  const id = request.body.id
-  const urlName = request.body.urlName
-  app.locals.urls.push({ folderId, date, id, urlName })
-  response.json({ folderId, date, id, urlName })
+  const urls = {folderId, urlName, date}
+  database('urls').insert(urls)
+  .then(() => {
+    database('urls').select()
+      .then((urls) => {
+        response.status(200).json(urls)
+      })
+  .catch((error) => {
+    console.log('something is wrong w db (urls)')
+  })
+  })
 })
 
-
-app.post('/api/folders', (request, response) => {
-  const id = Date.now()
-  const folderName = request.body.folderName
-  app.locals.folders.push({id, folderName})
-  response.json({ id , folderName})
-})
-
-app.post('/api/urls', (request, response) => {
-  const id = request.body.id
-  const urlName = request.body.urlName
-  const folderId = request.body.folderId
-  app.locals.urls.push({ id, urlName, folderId })
-  response.json({ id, urlName, folderId })
-})
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
