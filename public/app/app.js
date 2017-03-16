@@ -15,7 +15,7 @@ folderBtn.on('click', (arr) => {
 })
 
 const saveFolder = (input) => {
-  fetch('http://localhost:3000/api/folders', {
+  fetch(`http://localhost:3000/api/folders`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -25,7 +25,7 @@ const saveFolder = (input) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log('push folder', response))
+  // .then(response => console.log('push folder', response))
 }
 
 const clearFolders = () => {
@@ -45,6 +45,20 @@ const loadFolders = () => {
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
+    if(currentFolder) {
+      fetch(`http://localhost:3000/api/folders/${currentFolder}`, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        },
+        // body: JSON.stringify({
+        //   id: id,
+        //   urlName: urlName,
+        // }),
+      })
+      .then(response => response.json())
+      .then(response => console.log(response))
+    }
 })
 
 urlBtn.on('click', () => {
@@ -54,7 +68,6 @@ urlBtn.on('click', () => {
   //   `<p className='$currentFolder'>${input}<p>`
   // )
   pushURL(input)
-  console.log(currentFolder);
   clearUrls()
   loadUrls()
 })
@@ -70,7 +83,7 @@ const displayFolders = (arr) => {
 }
 
 const pushURL = (input, folderId) => {
-  fetch('http://localhost:3000/api/urls', {
+  fetch(`http://localhost:3000/api/folders/${currentFolder}`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -82,15 +95,18 @@ const pushURL = (input, folderId) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log('push url', response))
+  .then(response => displayUrls(response.filteredUrls))
 }
 
 const displayUrls = (arr) => {
-  arr.urls.map((el) => {
-    $('.url-list').append(
-      `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
-    )
-  })
+  console.log('arr', arr);
+  if(arr) {
+    arr.folders.map((el) => {
+      $('.url-list').append(
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
+      )
+    })
+  }
 }
 
 const clearUrls = () => {
@@ -98,7 +114,7 @@ const clearUrls = () => {
 }
 
 const loadUrls = () => {
-  fetch('http://localhost:3000/api/urls', {
+  fetch('http://localhost:3000/api/folders', {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
@@ -108,4 +124,4 @@ const loadUrls = () => {
   .then(response => displayUrls(response))
 }
 
-loadUrls()
+// loadUrls()

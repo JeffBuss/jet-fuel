@@ -2520,9 +2520,8 @@ var saveFolder = function saveFolder(input) {
     })
   }).then(function (response) {
     return response.json();
-  }).then(function (response) {
-    return console.log('push folder', response);
   });
+  // .then(response => console.log('push folder', response))
 };
 
 var clearFolders = function clearFolders() {
@@ -2544,6 +2543,18 @@ var loadFolders = function loadFolders() {
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
+  if (currentFolder) {
+    fetch('http://localhost:3000/api/folders/' + currentFolder, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json'
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (response) {
+      return console.log(response);
+    });
+  }
 });
 
 urlBtn.on('click', function () {
@@ -2553,7 +2564,6 @@ urlBtn.on('click', function () {
   //   `<p className='$currentFolder'>${input}<p>`
   // )
   pushURL(input);
-  console.log(currentFolder);
   clearUrls();
   loadUrls();
 });
@@ -2567,7 +2577,7 @@ var displayFolders = function displayFolders(arr) {
 };
 
 var pushURL = function pushURL(input, folderId) {
-  fetch('http://localhost:3000/api/urls', {
+  fetch('http://localhost:3000/api/folders/' + currentFolder, {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -2580,14 +2590,17 @@ var pushURL = function pushURL(input, folderId) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    return console.log('push url', response);
+    return displayUrls(response.filteredUrls);
   });
 };
 
 var displayUrls = function displayUrls(arr) {
-  arr.urls.map(function (el) {
-    $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
-  });
+  console.log('arr', arr);
+  if (arr) {
+    arr.folders.map(function (el) {
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
+    });
+  }
 };
 
 var clearUrls = function clearUrls() {
@@ -2595,7 +2608,7 @@ var clearUrls = function clearUrls() {
 };
 
 var loadUrls = function loadUrls() {
-  fetch('http://localhost:3000/api/urls', {
+  fetch('http://localhost:3000/api/folders', {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -2607,7 +2620,7 @@ var loadUrls = function loadUrls() {
   });
 };
 
-loadUrls();
+// loadUrls()
 
 /***/ })
 /******/ ]);

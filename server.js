@@ -22,9 +22,24 @@ app.get('/api/folders', (request, response) => {
   response.json({ folders })
 })
 
-app.get('/api/urls', (request, response) => {
+app.post('/api/folders/:folderId', (request, response) => {
+  const { folderId } = request.params
+  const date = Date.now()
+  const id = request.body.id
+  const urlName = request.body.urlName
+  app.locals.urls.push({ folderId, data, id, urlName })
+  response.json({ folderId, date, id, urlName })
+})
+
+app.get('/api/folders/:folderId', (request, response) => {
+  const { folderId } = request.params
   const urls = app.locals.urls
-  response.json({ urls })
+  const filteredUrls = urls.filter(url => {
+    if (url.folderId = folderId) {
+      return url;
+    }
+  })
+  response.json({ filteredUrls })
 })
 
 app.post('/api/folders', (request, response) => {
