@@ -27,7 +27,7 @@ app.post('/api/folders/:folderId', (request, response) => {
   const date = Date.now()
   const id = request.body.id
   const urlName = request.body.urlName
-  app.locals.urls.push({ folderId, data, id, urlName })
+  app.locals.urls.push({ folderId, date, id, urlName })
   response.json({ folderId, date, id, urlName })
 })
 
@@ -35,11 +35,11 @@ app.get('/api/folders/:folderId', (request, response) => {
   const { folderId } = request.params
   const urls = app.locals.urls
   const filteredUrls = urls.filter(url => {
-    if (url.folderId = folderId) {
+    if (url.folderId === folderId) {
       return url;
     }
   })
-  response.json({ filteredUrls })
+  response.json({filteredUrls})
 })
 
 app.post('/api/folders', (request, response) => {

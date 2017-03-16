@@ -2521,7 +2521,6 @@ var saveFolder = function saveFolder(input) {
   }).then(function (response) {
     return response.json();
   });
-  // .then(response => console.log('push folder', response))
 };
 
 var clearFolders = function clearFolders() {
@@ -2540,6 +2539,7 @@ var loadFolders = function loadFolders() {
     return displayFolders(response);
   });
 };
+loadFolders();
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
@@ -2552,7 +2552,7 @@ $('.url-folder').on('click', 'li', function (e) {
     }).then(function (response) {
       return response.json();
     }).then(function (response) {
-      return console.log(response);
+      return displayUrls(response.filteredUrls);
     });
   }
 });
@@ -2560,15 +2560,9 @@ $('.url-folder').on('click', 'li', function (e) {
 urlBtn.on('click', function () {
   event.preventDefault();
   var input = $('.url-input').val();
-  // $('.url-list').append(
-  //   `<p className='$currentFolder'>${input}<p>`
-  // )
   pushURL(input);
-  clearUrls();
   loadUrls();
 });
-
-loadFolders();
 
 var displayFolders = function displayFolders(arr) {
   arr.folders.map(function (el) {
@@ -2576,7 +2570,7 @@ var displayFolders = function displayFolders(arr) {
   });
 };
 
-var pushURL = function pushURL(input, folderId) {
+var pushURL = function pushURL(input) {
   fetch('http://localhost:3000/api/folders/' + currentFolder, {
     method: 'POST',
     headers: {
@@ -2590,15 +2584,18 @@ var pushURL = function pushURL(input, folderId) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    return displayUrls(response.filteredUrls);
+    console.log('push', response);
+    displayUrls([response]);
   });
 };
 
 var displayUrls = function displayUrls(arr) {
   console.log('arr', arr);
+  clearUrls();
   if (arr) {
-    arr.folders.map(function (el) {
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
+    arr.map(function (el) {
+      console.log('el?', el);
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.urlName + '</a></li>');
     });
   }
 };
@@ -2608,19 +2605,19 @@ var clearUrls = function clearUrls() {
 };
 
 var loadUrls = function loadUrls() {
-  fetch('http://localhost:3000/api/folders', {
-    method: 'GET',
-    headers: {
-      'content-type': 'application/json'
-    }
-  }).then(function (response) {
-    return response.json();
-  }).then(function (response) {
-    return displayUrls(response);
-  });
+  if (currentFolder) {
+    fetch('http://localhost:3000/api/folders/' + currentFolder, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json'
+      }
+    }).then(function (response) {
+      return response.json();
+    }).then(function (response) {
+      return displayUrls(response.filteredUrls);
+    });
+  }
 };
-
-// loadUrls()
 
 /***/ })
 /******/ ]);
