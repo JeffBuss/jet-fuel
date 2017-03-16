@@ -2580,5 +2580,27 @@ var pushURL = function pushURL(input, folderId) {
   });
 };
 
+var displayUrls = function displayUrls(arr) {
+  arr.urls.map(function (el) {
+    // const folderId = el.id
+    $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'>' + el.urlName + '</li>');
+  });
+};
+
+var loadUrls = function loadUrls() {
+  fetch('http://localhost:3000/api/urls', {
+    method: 'GET',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return displayUrls(response);
+  });
+};
+
+loadUrls();
+
 /***/ })
 /******/ ]);
