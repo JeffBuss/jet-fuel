@@ -2543,10 +2543,8 @@ var loadFolders = function loadFolders() {
 };
 
 $('.url-folder').on('click', 'li', function (e) {
-  // const folderId = e.target.id
   currentFolder = e.target.id;
-  console.log(currentFolder);
-  // pushURL(folderId)
+  console.log('currentFolderID', currentFolder);
 });
 
 urlBtn.on('click', function () {
@@ -2554,7 +2552,6 @@ urlBtn.on('click', function () {
   var input = $('.url-input').val();
   $('.url-list').append('<p className=\'$currentFolder\'>' + input + '<p>');
   pushURL(input);
-  console.log(currentFolder);
 });
 
 loadFolders();
