@@ -1,3 +1,4 @@
+require('../reset.css');
 require ('../styles.scss');
 
 const urlBtn = $('.url-btn')
@@ -64,7 +65,7 @@ loadFolders()
 const displayFolders = (arr) => {
   arr.folders.map((el) => {
     $('.url-folder').append(
-      `<li class='${el.folderName}' id='${el.id}'>${el.folderName}</li>`
+      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
     )
   })
 }
@@ -109,3 +110,19 @@ const loadUrls = () => {
 }
 
 loadUrls()
+
+$('.pop-up').on('click', () => {
+  console.log('pop-up');
+})
+
+$('.pop-down').on('click', () => {
+  console.log('pop-down');
+})
+
+$('.date-up').on('click', () => {
+  console.log('date-up');
+})
+
+$('.date-up').on('click', () => {
+  console.log('date-up');
+})
