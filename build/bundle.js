@@ -2544,7 +2544,6 @@ var loadFolders = function loadFolders() {
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
-  console.log(currentFolder);
 });
 
 urlBtn.on('click', function () {

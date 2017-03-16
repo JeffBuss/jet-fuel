@@ -45,7 +45,6 @@ const loadFolders = () => {
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
-  console.log(currentFolder)
 })
 
 urlBtn.on('click', () => {
