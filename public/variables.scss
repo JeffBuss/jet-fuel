@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
 $sansFont: 'Roboto', sans-serif;
 $lightBG: #fafafa;
 $medBG: #bababa;
@@ -7,7 +9,7 @@ $primaryDark: #16a085;
 
 @mixin buttonStyles {
   &:hover {
-        background-color: $primaryDark;
+        background-color: lighten($primaryLight, 20%);
         cursor: pointer;
         box-shadow: 5px 5px 5px rgba(0,0,0,0.7);
     }
