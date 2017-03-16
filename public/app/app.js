@@ -11,7 +11,6 @@ folderBtn.on('click', (event) => {
   event.preventDefault()
   let input = $('.folder-input').val()
   saveFolder(input)
-  clearFolders()
   loadFolders()
 })
 
@@ -26,6 +25,7 @@ const saveFolder = (input) => {
     })
   })
   .then(response => response.json())
+  .then(response => displayFolders(response))
 }
 
 const clearFolders = () => {
@@ -67,6 +67,8 @@ urlBtn.on('click', () => {
 
 
 const displayFolders = (folders) => {
+  clearFolders()
+  console.log('folders', folders)
   folders.map((el) => {
     $('.url-folder').append(
       `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
@@ -75,6 +77,7 @@ const displayFolders = (folders) => {
 }
 
 const pushURL = (input) => {
+  console.log('input', input)
   fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
     method: 'POST',
     headers: {
@@ -87,15 +90,13 @@ const pushURL = (input) => {
     })
   })
   .then(response => response.json())
-  .then(response => {
-    console.log('push', response)
-    displayUrls([response])
-  })
+  .then(response => loadUrls(response)
+  )
 }
 
 const displayUrls = (folders) => {
   clearUrls()
-  if(folders) {
+  if(folders.length > 0) {
     folders.map((el) => {
       console.log('el?', el)
       $('.url-list').append(
@@ -118,10 +119,9 @@ const loadUrls = () => {
     },
   })
   .then(response => response.json())
-  .then(response => displayUrls(response.filteredUrls))
+  .then(response => displayUrls(response))
   }
 }
-loadUrls()
 
 $('.pop-up').on('click', () => {
   console.log('pop-up');
