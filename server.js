@@ -1,6 +1,11 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const fs = require('fs')
+
+const environment = process.env.NODE_ENV || 'development';
+const configuration = require('./knexfile')[environment];
+const database = require('knex')(configuration);
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -18,11 +23,36 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/folders', (request, response) => {
-  const folders = app.locals.folders
-  response.json({ folders })
+  database('folders').select()
+    .then((folders) => {
+      response.status(200).json(folders);
+    })
+    .catch((error) => {
+      console.error('error stuff shit team');
+    })
 })
 
-app.post('/api/folders/:folderId', (request, response) => {
+// app.get('/api/urls', (request, response) => {
+//   database('urls').select()
+//     .then((urls) => {
+//       response.status(200).json(urls);
+//     })
+//     .catch((error) => {
+//       console.error('error stuff shit team');
+//     })
+// })
+app.get('/api/folders/:folderId/urls', (request, response) => {
+  const { folderId } = request.params
+    database('urls').where('folderId', folderId).select()
+      .then((urls) => {
+        response.status(200).json(urls);
+      })
+      .catch((error) => {
+        console.error('error stuff shit team');
+  })
+})
+
+app.post('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
   const date = Date.now()
   const id = request.body.id
@@ -31,16 +61,6 @@ app.post('/api/folders/:folderId', (request, response) => {
   response.json({ folderId, date, id, urlName })
 })
 
-app.get('/api/folders/:folderId', (request, response) => {
-  const { folderId } = request.params
-  const urls = app.locals.urls
-  const filteredUrls = urls.filter(url => {
-    if (url.folderId === folderId) {
-      return url;
-    }
-  })
-  response.json({filteredUrls})
-})
 
 app.post('/api/folders', (request, response) => {
   const id = Date.now()
