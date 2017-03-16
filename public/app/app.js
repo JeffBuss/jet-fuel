@@ -16,7 +16,7 @@ folderBtn.on('click', (arr) => {
 })
 
 const saveFolder = (input) => {
-  fetch('http://localhost:3000/api/folders', {
+  fetch(`http://localhost:3000/api/folders`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -26,7 +26,6 @@ const saveFolder = (input) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log('push folder', response))
 }
 
 const clearFolders = () => {
@@ -43,24 +42,29 @@ const loadFolders = () => {
   .then(response => response.json())
   .then(response => displayFolders(response))
 }
+loadFolders()
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
+    if(currentFolder) {
+      fetch('http://localhost:3000/api/folders/' + currentFolder, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(response => displayUrls(response.filteredUrls))
+    }
 })
 
 urlBtn.on('click', () => {
   event.preventDefault()
   let input = $('.url-input').val()
-  // $('.url-list').append(
-  //   `<p className='$currentFolder'>${input}<p>`
-  // )
   pushURL(input)
-  console.log(currentFolder);
-  clearUrls()
   loadUrls()
 })
 
-loadFolders()
 
 const displayFolders = (arr) => {
   arr.folders.map((el) => {
@@ -70,8 +74,8 @@ const displayFolders = (arr) => {
   })
 }
 
-const pushURL = (input, folderId) => {
-  fetch('http://localhost:3000/api/urls', {
+const pushURL = (input) => {
+  fetch('http://localhost:3000/api/folders/' + currentFolder, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -83,15 +87,23 @@ const pushURL = (input, folderId) => {
     })
   })
   .then(response => response.json())
-  .then(response => console.log('push url', response))
+  .then(response => {
+    console.log('push', response)
+    displayUrls([response])
+  })
 }
 
 const displayUrls = (arr) => {
-  arr.urls.map((el) => {
-    $('.url-list').append(
-      `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
-    )
-  })
+  console.log('arr', arr);
+  clearUrls()
+  if(arr) {
+    arr.map((el) => {
+      console.log('el?', el)
+      $('.url-list').append(
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.urlName}</a></li>`
+      )
+    })
+  }
 }
 
 const clearUrls = () => {
@@ -99,16 +111,17 @@ const clearUrls = () => {
 }
 
 const loadUrls = () => {
-  fetch('http://localhost:3000/api/urls', {
+  if(currentFolder){
+    fetch('http://localhost:3000/api/folders/' + currentFolder, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
     },
   })
   .then(response => response.json())
-  .then(response => displayUrls(response))
+  .then(response => displayUrls(response.filteredUrls))
+  }
 }
-
 loadUrls()
 
 $('.pop-up').on('click', () => {
