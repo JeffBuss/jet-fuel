@@ -2638,7 +2638,7 @@ var displayUrls = function displayUrls(folders) {
   if (folders.length > 0) {
     folders.map(function (el) {
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.urlName + '</a></li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
     });
   }
 };
