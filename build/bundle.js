@@ -2541,19 +2541,17 @@ var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
 
 var currentFolder = undefined;
+var clicked = 0;
 
 folderBtn.on('click', function (event) {
   event.preventDefault();
   var input = $('.folder-input').val();
-  console.log('click');
   saveFolder(input);
-  clearFolders();
   loadFolders();
 });
 
 var saveFolder = function saveFolder(input) {
-  console.log(input);
-  fetch('/api/folders', {
+  fetch('http://localhost:3000/api/folders', {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -2573,7 +2571,7 @@ var clearFolders = function clearFolders() {
 };
 
 var loadFolders = function loadFolders() {
-  fetch('/api/folders', {
+  fetch('http://localhost:3000/api/folders', {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -2589,7 +2587,7 @@ loadFolders();
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
   if (currentFolder) {
-    fetch('/api/folders/' + currentFolder + '/urls', {
+    fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
       headers: {
         'content-type': 'application/json'
@@ -2610,13 +2608,16 @@ urlBtn.on('click', function () {
 });
 
 var displayFolders = function displayFolders(folders) {
+  clearFolders();
+  console.log('folders', folders);
   folders.map(function (el) {
     $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
   });
 };
 
 var pushURL = function pushURL(input) {
-  fetch('/api/folders/' + currentFolder + '/urls', {
+  console.log('input', input);
+  fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -2629,19 +2630,40 @@ var pushURL = function pushURL(input) {
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    console.log('push', response);
-    displayUrls([response]);
+    return loadUrls(response);
   });
 };
 
 var displayUrls = function displayUrls(folders) {
   clearUrls();
-  if (folders) {
+  if (folders.length > 0) {
     folders.map(function (el) {
+      // let clicked = 0
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.urlName + '</a></li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + ' </a> visits: ' + clicked + '</li>');
     });
   }
+};
+
+$('.url-section').on('click', 'li', function (e) {
+  console.log('id', e.target.id);
+  console.log('clicked', clicked);
+  updateClicks();
+});
+
+var updateClicks = function updateClicks() {
+  console.log('clicked me');
+  // fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
+  //   method: 'PATCH',
+  //   headers: {
+  //     'content-type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     folderId: currentFolder,
+  //   })
+  // })
+  // .then(response => response.json())
+  // .then(response => console.log('patch request', response))
 };
 
 var clearUrls = function clearUrls() {
@@ -2650,7 +2672,7 @@ var clearUrls = function clearUrls() {
 
 var loadUrls = function loadUrls() {
   if (currentFolder) {
-    fetch('/api/folders/' + currentFolder + '/urls', {
+    fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
       headers: {
         'content-type': 'application/json'
@@ -2658,11 +2680,10 @@ var loadUrls = function loadUrls() {
     }).then(function (response) {
       return response.json();
     }).then(function (response) {
-      return displayUrls(response.filteredUrls);
+      return displayUrls(response);
     });
   }
 };
-loadUrls();
 
 $('.pop-up').on('click', function () {
   console.log('pop-up');
