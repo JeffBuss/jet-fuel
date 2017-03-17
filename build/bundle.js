@@ -2543,6 +2543,7 @@ var folderList = $('.folder-list');
 var currentFolder = undefined;
 
 folderBtn.on('click', function (event) {
+  event.preventDefault();
   var input = $('.folder-input').val();
   saveFolder(input);
   clearFolders();
