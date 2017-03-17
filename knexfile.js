@@ -1,7 +1,7 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection:'postgres://localhost/jetfuel',
+    connection:'postgres://localhost/jetfuel4',
     migrations: {
       directory: './db/migrations'
     },
@@ -13,7 +13,7 @@ module.exports = {
 
   test: {
     client: 'pg',
-    connection:'postgres://localhost/jetfuel-test',
+    connection:'postgres://localhost/jetfuel4-test',
     migrations: {
       directory: './db/migrations'
     },
@@ -25,7 +25,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,m
+    connection: process.env.HEROKU_POSTGRESQL_SILVER_URL + `?ssl=true`,
     migrations: {
       directory: './db/migrations'
     },
