@@ -6,6 +6,7 @@ const folderBtn = $('.folder-btn')
 const folderList = $('.folder-list')
 
 let currentFolder = undefined
+let clicked = 0
 
 folderBtn.on('click', (event) => {
   event.preventDefault()
@@ -98,12 +99,31 @@ const displayUrls = (folders) => {
   clearUrls()
   if(folders.length > 0) {
     folders.map((el) => {
+      // let clicked = 0
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id} </a>${clicked}</li>`
       )
     })
   }
+}
+
+$('.url-section').on('click', 'li', (e) => {
+  // clicked++
+  console.log(e.target.id)
+  console.log(clicked)
+  updateClicks()
+})
+
+const updateClicks = () => {
+  fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`), {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json',
+    },
+  }
+  .then(response => response.json())
+  .then(response => console.log('patch response ', response))
 }
 
 const clearUrls = () => {

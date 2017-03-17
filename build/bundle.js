@@ -2541,6 +2541,7 @@ var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
 
 var currentFolder = undefined;
+var clicked = 0;
 
 folderBtn.on('click', function (event) {
   event.preventDefault();
@@ -2637,10 +2638,31 @@ var displayUrls = function displayUrls(folders) {
   clearUrls();
   if (folders.length > 0) {
     folders.map(function (el) {
+      // let clicked = 0
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a></li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + ' </a>' + clicked + '</li>');
     });
   }
+};
+
+$('.url-section').on('click', 'li', function (e) {
+  // clicked++
+  console.log(e.target.id);
+  console.log(clicked);
+  updateClicks();
+});
+
+var updateClicks = function updateClicks() {
+  fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls'), {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json'
+    }
+  }.then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log('patch response ', response);
+  });
 };
 
 var clearUrls = function clearUrls() {
