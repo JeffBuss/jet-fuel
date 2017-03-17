@@ -100,7 +100,7 @@ const displayUrls = (folders) => {
     folders.map((el) => {
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.urlName}</a></li>`
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
       )
     })
   }
