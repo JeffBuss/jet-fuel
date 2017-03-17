@@ -10,12 +10,14 @@ let currentFolder = undefined
 folderBtn.on('click', (event) => {
   event.preventDefault()
   let input = $('.folder-input').val()
+  console.log('click')
   saveFolder(input)
   clearFolders()
   loadFolders()
 })
 
 const saveFolder = (input) => {
+  console.log(input)
   fetch(`/api/folders`, {
     method: 'POST',
     headers: {
@@ -26,6 +28,7 @@ const saveFolder = (input) => {
     })
   })
   .then(response => response.json())
+  .then(response => displayFolders(response))
 }
 
 const clearFolders = () => {

@@ -2545,12 +2545,14 @@ var currentFolder = undefined;
 folderBtn.on('click', function (event) {
   event.preventDefault();
   var input = $('.folder-input').val();
+  console.log('click');
   saveFolder(input);
   clearFolders();
   loadFolders();
 });
 
 var saveFolder = function saveFolder(input) {
+  console.log(input);
   fetch('/api/folders', {
     method: 'POST',
     headers: {
@@ -2561,6 +2563,8 @@ var saveFolder = function saveFolder(input) {
     })
   }).then(function (response) {
     return response.json();
+  }).then(function (response) {
+    return displayFolders(response);
   });
 };
 
