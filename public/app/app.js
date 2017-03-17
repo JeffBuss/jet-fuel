@@ -16,7 +16,7 @@ folderBtn.on('click', (event) => {
 })
 
 const saveFolder = (input) => {
-  fetch(`http://localhost:3000/api/folders`, {
+  fetch(`/api/folders`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -33,7 +33,7 @@ const clearFolders = () => {
 }
 
 const loadFolders = () => {
-  fetch('http://localhost:3000/api/folders', {
+  fetch('/api/folders', {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
@@ -47,7 +47,7 @@ loadFolders()
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
     if(currentFolder) {
-      fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
+      fetch(`/api/folders/${currentFolder}/urls`, {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
@@ -75,7 +75,7 @@ const displayFolders = (folders) => {
 }
 
 const pushURL = (input) => {
-  fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
+  fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'POST',
     headers: {
       'content-type': 'application/json',
@@ -111,7 +111,7 @@ const clearUrls = () => {
 
 const loadUrls = () => {
   if(currentFolder){
-    fetch(`http://localhost:3000/api/folders/${currentFolder}/urls`, {
+    fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
