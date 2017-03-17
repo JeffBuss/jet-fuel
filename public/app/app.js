@@ -8,6 +8,7 @@ const folderList = $('.folder-list')
 let currentFolder = undefined
 
 folderBtn.on('click', (event) => {
+  event.preventDefault()
   let input = $('.folder-input').val()
   saveFolder(input)
   clearFolders()
