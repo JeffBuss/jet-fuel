@@ -2550,7 +2550,7 @@ folderBtn.on('click', function (event) {
 });
 
 var saveFolder = function saveFolder(input) {
-  fetch('http://localhost:3000/api/folders', {
+  fetch('/api/folders', {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -2570,7 +2570,7 @@ var clearFolders = function clearFolders() {
 };
 
 var loadFolders = function loadFolders() {
-  fetch('http://localhost:3000/api/folders', {
+  fetch('/api/folders', {
     method: 'GET',
     headers: {
       'content-type': 'application/json'
@@ -2586,7 +2586,7 @@ loadFolders();
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
   if (currentFolder) {
-    fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
+    fetch('/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
       headers: {
         'content-type': 'application/json'
@@ -2616,7 +2616,7 @@ var displayFolders = function displayFolders(folders) {
 
 var pushURL = function pushURL(input) {
   console.log('input', input);
-  fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
+  fetch('/api/folders/' + currentFolder + '/urls', {
     method: 'POST',
     headers: {
       'content-type': 'application/json'
@@ -2649,7 +2649,7 @@ var clearUrls = function clearUrls() {
 
 var loadUrls = function loadUrls() {
   if (currentFolder) {
-    fetch('http://localhost:3000/api/folders/' + currentFolder + '/urls', {
+    fetch('/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
       headers: {
         'content-type': 'application/json'
