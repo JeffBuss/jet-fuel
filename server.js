@@ -22,13 +22,28 @@ app.get('/', (request, response) => {
  })
 })
 
+app.get('/:id', (request, response) => {
+  const id = request.params.id
+  database('urls').where('id', request.params.id).increment('clicks', 1)
+  .then(() => {
+    database('urls').where('id', id).select()
+        .then((url) => {
+          console.log(url);
+          response.redirect(`http://${url[0].urlName}`);
+        })
+        .catch((error) => {
+          console.error(error)
+        });
+    })
+})
+
 app.get('/api/folders', (request, response) => {
   database('folders').select()
     .then((folders) => {
       response.status(200).json(folders);
     })
     .catch((error) => {
-      console.error('error stuff shit team');
+      console.error('something wrong w db (get folders)');
     })
 })
 
@@ -54,15 +69,17 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
         response.status(200).json(urls);
       })
       .catch((error) => {
-        console.error('error stuff shit team');
+        console.error('something wrong w db (get urls)');
   })
 })
 
 app.post('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
   const urlName = request.body.urlName
-  const date = Date.now()
-  const urls = {folderId, urlName, date}
+  const d = new Date()
+  const date = d.toString()
+  const clicks = 0
+  const urls = {folderId, urlName, date, clicks}
   database('urls').insert(urls)
   .then(() => {
     database('urls').select()
@@ -75,6 +92,20 @@ app.post('/api/folders/:folderId/urls', (request, response) => {
   })
 })
 
+app.patch('/api/folders/:folderId/urls', (request, response) => {
+  database('urls').increment('clicks', 1).where('id', request.body.urlId)
+  .then(clicks => {
+    database('urls').where('folderId', request.params.folderId).select()
+    .then(urls => {
+      response.status(200).json(urls);
+    })
+    .catch(error => {
+      console.log(error);
+      console.error('somethings wrong with db (patch)');
+    })
+  })
+
+})
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)

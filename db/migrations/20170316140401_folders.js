@@ -1,4 +1,3 @@
-
 exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('folders', (table) => {
@@ -9,10 +8,14 @@ exports.up = function(knex, Promise) {
 
     knex.schema.createTable('urls', (table) => {
       table.increments('id').primary()
-      table.integer('folderId');
       table.string('urlName');
       table.string('date');
+      table.integer('clicks');
       table.integer('popularity');
+      table.integer('folderId')
+           .references('id')
+           .inTable('folders');
+
       table.timestamps();
     })
   ])

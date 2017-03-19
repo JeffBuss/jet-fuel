@@ -11,7 +11,6 @@ folderBtn.on('click', (event) => {
   event.preventDefault()
   let input = $('.folder-input').val()
   saveFolder(input)
-  loadFolders()
 })
 
 const saveFolder = (input) => {
@@ -28,10 +27,6 @@ const saveFolder = (input) => {
   .then(response => displayFolders(response))
 }
 
-const clearFolders = () => {
-  $('.url-folder').empty();
-}
-
 const loadFolders = () => {
   fetch('/api/folders', {
     method: 'GET',
@@ -42,7 +37,22 @@ const loadFolders = () => {
   .then(response => response.json())
   .then(response => displayFolders(response))
 }
+
 loadFolders()
+
+const displayFolders = (folders) => {
+  clearFolders()
+  console.log('folders', folders)
+  folders.map((el) => {
+    $('.url-folder').append(
+      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
+    )
+  })
+}
+
+const clearFolders = () => {
+  $('.url-folder').empty();
+}
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
@@ -65,16 +75,6 @@ urlBtn.on('click', () => {
   loadUrls()
 })
 
-
-const displayFolders = (folders) => {
-  clearFolders()
-  console.log('folders', folders)
-  folders.map((el) => {
-    $('.url-folder').append(
-      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
-    )
-  })
-}
 
 const pushURL = (input) => {
   console.log('input', input)
@@ -100,7 +100,7 @@ const displayUrls = (folders) => {
     folders.map((el) => {
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a></li>`
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a> visits: ${el.clicks} <p>${el.date}</p></li>`
       )
     })
   }
@@ -110,7 +110,27 @@ const clearUrls = () => {
   $('.url-list').empty();
 }
 
-const loadUrls = () => {
+$('.url-section').on('click', 'li', (e) => {
+  console.log('id',e.target.id)
+  updateClicks(e)
+})
+
+const updateClicks = (e) => {
+  console.log(e.target.id)
+    fetch(`/api/folders/${currentFolder}/urls`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        urlId: e.target.id,
+      })
+    })
+    .then(response => response.json())
+    .then(response => displayUrls(response))
+}
+
+const loadUrls = (cf, filter) => {
   if(currentFolder){
     fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'GET',
@@ -119,22 +139,62 @@ const loadUrls = () => {
     },
   })
   .then(response => response.json())
-  .then(response => displayUrls(response))
+  .then((response) => {
+    if (filter === 'up') {
+      response = filterPop(response, filter)
+    } else if (filter === 'down') {
+      response = filterPop(response, filter)
+    } else if (filter === 'dUp') {
+      response = filterDate(response, filter)
+    } else if (filter === 'dDown'){
+      response = filterDate(response, filter)
+    } else {
+      displayUrls(response)
+    }
+    displayUrls(response)
+  })
   }
 }
 
+const filterPop = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter === 'up') {
+      return b.clicks - a.clicks;
+    } else {
+      return a.clicks - b.clicks;
+    }
+  })
+  return sortedUrls;
+}
+
+const filterDate = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter == 'dUp') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else {
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
+    }
+  })
+  return sortedUrls;
+}
+
 $('.pop-up').on('click', () => {
-  console.log('pop-up');
+  event.preventDefault()
+  loadUrls(currentFolder, 'up');
 })
 
 $('.pop-down').on('click', () => {
-  console.log('pop-down');
+  event.preventDefault()
+  loadUrls(currentFolder, 'down');
 })
 
-$('.date-up').on('click', () => {
-  console.log('date-up');
-})
 
 $('.date-up').on('click', () => {
-  console.log('date-up');
+  event.preventDefault()
+  loadUrls(currentFolder, 'dUp')
+})
+
+$('.date-down').on('click', () => {
+  event.preventDefault()
+  loadUrls(currentFolder, 'dDown')
 })
