@@ -76,7 +76,8 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
 app.post('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
   const urlName = request.body.urlName
-  const date = Date.now()
+  const d = new Date()
+  const date = d.toString()
   const clicks = 0
   const urls = {folderId, urlName, date, clicks}
   database('urls').insert(urls)

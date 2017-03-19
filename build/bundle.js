@@ -2639,7 +2639,7 @@ var displayUrls = function displayUrls(folders) {
     folders.map(function (el) {
       // let clicked = 0
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + '</li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + ' <p>' + el.date + '</p></li>');
     });
   }
 };
