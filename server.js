@@ -76,19 +76,19 @@ app.post('/api/folders/:folderId/urls', (request, response) => {
   })
 })
 
-// app.patch('/api/folders/:folderId/urls', (request, response) => {
-//   database('urls').increment('clicks', 1).where('id', request.params.folderId)
-//   .then(response => {
-//     database('urls').where('folderId', request.body.folderId).select()
-//     .then(urls => {
-//       response.status(200).json(urls);
-//     })
-//     .catch(error => {
-//       console.log(error);
-//       console.error('somethings wrong with db (patch)');
-//     })
-//   })
-// })
+app.patch('/api/folders/:folderId/urls', (request, response) => {
+  database('urls').increment('clicks', 1).where('id', request.params.folderId)
+  .then((response) => {
+    database('urls').select()
+    .then((urls) => {
+      response.status(200).json(urls);
+    })
+    .catch(error => {
+      console.log(error);
+      console.error('somethings wrong with db (patch)');
+    })
+  })
+})
 
 
 app.listen(app.get('port'), () => {

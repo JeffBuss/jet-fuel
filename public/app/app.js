@@ -115,17 +115,17 @@ $('.url-section').on('click', 'li', (e) => {
 
 const updateClicks = () => {
   console.log('clicked me')
-    // fetch(`/api/folders/${currentFolder}/urls`, {
-    //   method: 'PATCH',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     folderId: currentFolder,
-    //   })
-    // })
-    // .then(response => response.json())
-    // .then(response => console.log('patch request', response))
+    fetch(`/api/folders/${currentFolder}/urls`, {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        folderId: currentFolder,
+      })
+    })
+    .then(response => response.json())
+    .then(response => console.log('patch request', response))
 }
 
 const clearUrls = () => {

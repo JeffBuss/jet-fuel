@@ -2652,17 +2652,19 @@ $('.url-section').on('click', 'li', function (e) {
 
 var updateClicks = function updateClicks() {
   console.log('clicked me');
-  // fetch(`/api/folders/${currentFolder}/urls`, {
-  //   method: 'PATCH',
-  //   headers: {
-  //     'content-type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     folderId: currentFolder,
-  //   })
-  // })
-  // .then(response => response.json())
-  // .then(response => console.log('patch request', response))
+  fetch('/api/folders/' + currentFolder + '/urls', {
+    method: 'PATCH',
+    headers: {
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      folderId: currentFolder
+    })
+  }).then(function (response) {
+    return response.json();
+  }).then(function (response) {
+    return console.log('patch request', response);
+  });
 };
 
 var clearUrls = function clearUrls() {
