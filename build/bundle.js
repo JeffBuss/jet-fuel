@@ -2683,6 +2683,10 @@ var loadUrls = function loadUrls(cf, filter) {
         response = filterPop(response, filter);
       } else if (filter === 'down') {
         response = filterPop(response, filter);
+      } else if (filter === 'dUp') {
+        response = filterDate(response, filter);
+      } else if (filter === 'dDown') {
+        response = filterDate(response, filter);
       } else {
         displayUrls(response);
       }
@@ -2702,24 +2706,35 @@ var filterPop = function filterPop(urls, filter) {
   return sortedUrls;
 };
 
+var filterDate = function filterDate(urls, filter) {
+  var sortedUrls = urls.sort(function (a, b) {
+    if (filter == 'dUp') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    } else {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+  });
+  return sortedUrls;
+};
+
 $('.pop-up').on('click', function () {
   event.preventDefault();
-  console.log('pop up', currentFolder);
   loadUrls(currentFolder, 'up');
 });
 
 $('.pop-down').on('click', function () {
   event.preventDefault();
-  console.log('pop down', currentFolder);
   loadUrls(currentFolder, 'down');
 });
 
 $('.date-up').on('click', function () {
-  console.log('date-up');
+  event.preventDefault();
+  loadUrls(currentFolder, 'dUp');
 });
 
-$('.date-up').on('click', function () {
-  console.log('date-up');
+$('.date-down').on('click', function () {
+  event.preventDefault();
+  loadUrls(currentFolder, 'dDown');
 });
 
 /***/ })

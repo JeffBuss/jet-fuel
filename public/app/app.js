@@ -130,8 +130,6 @@ const updateClicks = (e) => {
     .then(response => displayUrls(response))
 }
 
-
-
 const loadUrls = (cf, filter) => {
   if(currentFolder){
     fetch(`/api/folders/${currentFolder}/urls`, {
@@ -146,6 +144,10 @@ const loadUrls = (cf, filter) => {
       response = filterPop(response, filter)
     } else if (filter === 'down') {
       response = filterPop(response, filter)
+    } else if (filter === 'dUp') {
+      response = filterDate(response, filter)
+    } else if (filter === 'dDown'){
+      response = filterDate(response, filter)
     } else {
       displayUrls(response)
     }
@@ -157,31 +159,42 @@ const loadUrls = (cf, filter) => {
 const filterPop = (urls, filter) => {
   let sortedUrls = urls.sort((a,b) => {
     if(filter === 'up') {
-      return b.clicks - a.clicks
+      return b.clicks - a.clicks;
     } else {
-      return a.clicks - b.clicks
+      return a.clicks - b.clicks;
     }
   })
-  return sortedUrls
+  return sortedUrls;
+}
+
+const filterDate = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter == 'dUp') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else {
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
+    }
+  })
+  return sortedUrls;
 }
 
 $('.pop-up').on('click', () => {
   event.preventDefault()
-  console.log('pop up', currentFolder)
-   loadUrls(currentFolder, 'up');
+  loadUrls(currentFolder, 'up');
 })
 
 $('.pop-down').on('click', () => {
   event.preventDefault()
-  console.log('pop down', currentFolder)
-   loadUrls(currentFolder, 'down');
+  loadUrls(currentFolder, 'down');
 })
 
 
 $('.date-up').on('click', () => {
-  console.log('date-up');
+  event.preventDefault()
+  loadUrls(currentFolder, 'dUp')
 })
 
-$('.date-up').on('click', () => {
-  console.log('date-up');
+$('.date-down').on('click', () => {
+  event.preventDefault()
+  loadUrls(currentFolder, 'dDown')
 })
