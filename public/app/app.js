@@ -6,7 +6,6 @@ const folderBtn = $('.folder-btn')
 const folderList = $('.folder-list')
 
 let currentFolder = undefined
-let clicked = 0
 
 folderBtn.on('click', (event) => {
   event.preventDefault()
@@ -28,10 +27,6 @@ const saveFolder = (input) => {
   .then(response => displayFolders(response))
 }
 
-const clearFolders = () => {
-  $('.url-folder').empty();
-}
-
 const loadFolders = () => {
   fetch('/api/folders', {
     method: 'GET',
@@ -42,7 +37,22 @@ const loadFolders = () => {
   .then(response => response.json())
   .then(response => displayFolders(response))
 }
+
 loadFolders()
+
+const displayFolders = (folders) => {
+  clearFolders()
+  console.log('folders', folders)
+  folders.map((el) => {
+    $('.url-folder').append(
+      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
+    )
+  })
+}
+
+const clearFolders = () => {
+  $('.url-folder').empty();
+}
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
@@ -66,16 +76,6 @@ urlBtn.on('click', () => {
 })
 
 
-const displayFolders = (folders) => {
-  clearFolders()
-  console.log('folders', folders)
-  folders.map((el) => {
-    $('.url-folder').append(
-      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
-    )
-  })
-}
-
 const pushURL = (input) => {
   console.log('input', input)
   fetch(`/api/folders/${currentFolder}/urls`, {
@@ -98,7 +98,6 @@ const displayUrls = (folders) => {
   clearUrls()
   if(folders.length > 0) {
     folders.map((el) => {
-      // let clicked = 0
       console.log('el?', el)
       $('.url-list').append(
         `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a> visits: ${el.clicks} <p>${el.date}</p></li>`
@@ -107,9 +106,12 @@ const displayUrls = (folders) => {
   }
 }
 
+const clearUrls = () => {
+  $('.url-list').empty();
+}
+
 $('.url-section').on('click', 'li', (e) => {
   console.log('id',e.target.id)
-  console.log('clicked', clicked)
   updateClicks(e)
 })
 
@@ -128,9 +130,7 @@ const updateClicks = (e) => {
     .then(response => displayUrls(response))
 }
 
-const clearUrls = () => {
-  $('.url-list').empty();
-}
+
 
 const loadUrls = () => {
   if(currentFolder){

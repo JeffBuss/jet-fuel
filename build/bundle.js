@@ -2541,7 +2541,6 @@ var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
 
 var currentFolder = undefined;
-var clicked = 0;
 
 folderBtn.on('click', function (event) {
   event.preventDefault();
@@ -2565,10 +2564,6 @@ var saveFolder = function saveFolder(input) {
   });
 };
 
-var clearFolders = function clearFolders() {
-  $('.url-folder').empty();
-};
-
 var loadFolders = function loadFolders() {
   fetch('/api/folders', {
     method: 'GET',
@@ -2581,7 +2576,20 @@ var loadFolders = function loadFolders() {
     return displayFolders(response);
   });
 };
+
 loadFolders();
+
+var displayFolders = function displayFolders(folders) {
+  clearFolders();
+  console.log('folders', folders);
+  folders.map(function (el) {
+    $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
+  });
+};
+
+var clearFolders = function clearFolders() {
+  $('.url-folder').empty();
+};
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
@@ -2606,14 +2614,6 @@ urlBtn.on('click', function () {
   loadUrls();
 });
 
-var displayFolders = function displayFolders(folders) {
-  clearFolders();
-  console.log('folders', folders);
-  folders.map(function (el) {
-    $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
-  });
-};
-
 var pushURL = function pushURL(input) {
   console.log('input', input);
   fetch('/api/folders/' + currentFolder + '/urls', {
@@ -2637,16 +2637,18 @@ var displayUrls = function displayUrls(folders) {
   clearUrls();
   if (folders.length > 0) {
     folders.map(function (el) {
-      // let clicked = 0
       console.log('el?', el);
       $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + ' <p>' + el.date + '</p></li>');
     });
   }
 };
 
+var clearUrls = function clearUrls() {
+  $('.url-list').empty();
+};
+
 $('.url-section').on('click', 'li', function (e) {
   console.log('id', e.target.id);
-  console.log('clicked', clicked);
   updateClicks(e);
 });
 
@@ -2665,10 +2667,6 @@ var updateClicks = function updateClicks(e) {
   }).then(function (response) {
     return displayUrls(response);
   });
-};
-
-var clearUrls = function clearUrls() {
-  $('.url-list').empty();
 };
 
 var loadUrls = function loadUrls() {
