@@ -2541,7 +2541,6 @@ var folderBtn = $('.folder-btn');
 var folderList = $('.folder-list');
 
 var currentFolder = undefined;
-var clicked = 0;
 
 folderBtn.on('click', function (event) {
   event.preventDefault();
@@ -2565,10 +2564,6 @@ var saveFolder = function saveFolder(input) {
   });
 };
 
-var clearFolders = function clearFolders() {
-  $('.url-folder').empty();
-};
-
 var loadFolders = function loadFolders() {
   fetch('/api/folders', {
     method: 'GET',
@@ -2581,7 +2576,20 @@ var loadFolders = function loadFolders() {
     return displayFolders(response);
   });
 };
+
 loadFolders();
+
+var displayFolders = function displayFolders(folders) {
+  clearFolders();
+  console.log('folders', folders);
+  folders.map(function (el) {
+    $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
+  });
+};
+
+var clearFolders = function clearFolders() {
+  $('.url-folder').empty();
+};
 
 $('.url-folder').on('click', 'li', function (e) {
   currentFolder = e.target.id;
@@ -2606,14 +2614,6 @@ urlBtn.on('click', function () {
   loadUrls();
 });
 
-var displayFolders = function displayFolders(folders) {
-  clearFolders();
-  console.log('folders', folders);
-  folders.map(function (el) {
-    $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
-  });
-};
-
 var pushURL = function pushURL(input) {
   console.log('input', input);
   fetch('/api/folders/' + currentFolder + '/urls', {
@@ -2637,16 +2637,18 @@ var displayUrls = function displayUrls(folders) {
   clearUrls();
   if (folders.length > 0) {
     folders.map(function (el) {
-      // let clicked = 0
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + '</li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + ' <p>' + el.date + '</p></li>');
     });
   }
 };
 
+var clearUrls = function clearUrls() {
+  $('.url-list').empty();
+};
+
 $('.url-section').on('click', 'li', function (e) {
   console.log('id', e.target.id);
-  console.log('clicked', clicked);
   updateClicks(e);
 });
 
@@ -2667,11 +2669,7 @@ var updateClicks = function updateClicks(e) {
   });
 };
 
-var clearUrls = function clearUrls() {
-  $('.url-list').empty();
-};
-
-var loadUrls = function loadUrls() {
+var loadUrls = function loadUrls(cf, filter) {
   if (currentFolder) {
     fetch('/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
@@ -2681,25 +2679,62 @@ var loadUrls = function loadUrls() {
     }).then(function (response) {
       return response.json();
     }).then(function (response) {
-      return displayUrls(response);
+      if (filter === 'up') {
+        response = filterPop(response, filter);
+      } else if (filter === 'down') {
+        response = filterPop(response, filter);
+      } else if (filter === 'dUp') {
+        response = filterDate(response, filter);
+      } else if (filter === 'dDown') {
+        response = filterDate(response, filter);
+      } else {
+        displayUrls(response);
+      }
+      displayUrls(response);
     });
   }
 };
 
+var filterPop = function filterPop(urls, filter) {
+  var sortedUrls = urls.sort(function (a, b) {
+    if (filter === 'up') {
+      return b.clicks - a.clicks;
+    } else {
+      return a.clicks - b.clicks;
+    }
+  });
+  return sortedUrls;
+};
+
+var filterDate = function filterDate(urls, filter) {
+  var sortedUrls = urls.sort(function (a, b) {
+    if (filter == 'dUp') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    } else {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+  });
+  return sortedUrls;
+};
+
 $('.pop-up').on('click', function () {
-  console.log('pop-up');
+  event.preventDefault();
+  loadUrls(currentFolder, 'up');
 });
 
 $('.pop-down').on('click', function () {
-  console.log('pop-down');
+  event.preventDefault();
+  loadUrls(currentFolder, 'down');
 });
 
 $('.date-up').on('click', function () {
-  console.log('date-up');
+  event.preventDefault();
+  loadUrls(currentFolder, 'dUp');
 });
 
-$('.date-up').on('click', function () {
-  console.log('date-up');
+$('.date-down').on('click', function () {
+  event.preventDefault();
+  loadUrls(currentFolder, 'dDown');
 });
 
 /***/ })

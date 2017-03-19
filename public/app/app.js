@@ -6,7 +6,6 @@ const folderBtn = $('.folder-btn')
 const folderList = $('.folder-list')
 
 let currentFolder = undefined
-let clicked = 0
 
 folderBtn.on('click', (event) => {
   event.preventDefault()
@@ -28,10 +27,6 @@ const saveFolder = (input) => {
   .then(response => displayFolders(response))
 }
 
-const clearFolders = () => {
-  $('.url-folder').empty();
-}
-
 const loadFolders = () => {
   fetch('/api/folders', {
     method: 'GET',
@@ -42,7 +37,22 @@ const loadFolders = () => {
   .then(response => response.json())
   .then(response => displayFolders(response))
 }
+
 loadFolders()
+
+const displayFolders = (folders) => {
+  clearFolders()
+  console.log('folders', folders)
+  folders.map((el) => {
+    $('.url-folder').append(
+      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
+    )
+  })
+}
+
+const clearFolders = () => {
+  $('.url-folder').empty();
+}
 
 $('.url-folder').on('click', 'li', (e) => {
   currentFolder = e.target.id
@@ -66,16 +76,6 @@ urlBtn.on('click', () => {
 })
 
 
-const displayFolders = (folders) => {
-  clearFolders()
-  console.log('folders', folders)
-  folders.map((el) => {
-    $('.url-folder').append(
-      `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
-    )
-  })
-}
-
 const pushURL = (input) => {
   console.log('input', input)
   fetch(`/api/folders/${currentFolder}/urls`, {
@@ -98,18 +98,20 @@ const displayUrls = (folders) => {
   clearUrls()
   if(folders.length > 0) {
     folders.map((el) => {
-      // let clicked = 0
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a> visits: ${el.clicks}</li>`
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a> visits: ${el.clicks} <p>${el.date}</p></li>`
       )
     })
   }
 }
 
+const clearUrls = () => {
+  $('.url-list').empty();
+}
+
 $('.url-section').on('click', 'li', (e) => {
   console.log('id',e.target.id)
-  console.log('clicked', clicked)
   updateClicks(e)
 })
 
@@ -128,11 +130,7 @@ const updateClicks = (e) => {
     .then(response => displayUrls(response))
 }
 
-const clearUrls = () => {
-  $('.url-list').empty();
-}
-
-const loadUrls = () => {
+const loadUrls = (cf, filter) => {
   if(currentFolder){
     fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'GET',
@@ -141,22 +139,62 @@ const loadUrls = () => {
     },
   })
   .then(response => response.json())
-  .then(response => displayUrls(response))
+  .then((response) => {
+    if (filter === 'up') {
+      response = filterPop(response, filter)
+    } else if (filter === 'down') {
+      response = filterPop(response, filter)
+    } else if (filter === 'dUp') {
+      response = filterDate(response, filter)
+    } else if (filter === 'dDown'){
+      response = filterDate(response, filter)
+    } else {
+      displayUrls(response)
+    }
+    displayUrls(response)
+  })
   }
 }
 
+const filterPop = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter === 'up') {
+      return b.clicks - a.clicks;
+    } else {
+      return a.clicks - b.clicks;
+    }
+  })
+  return sortedUrls;
+}
+
+const filterDate = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter == 'dUp') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime()
+    } else {
+      return new Date(a.date).getTime() - new Date(b.date).getTime()
+    }
+  })
+  return sortedUrls;
+}
+
 $('.pop-up').on('click', () => {
-  console.log('pop-up');
+  event.preventDefault()
+  loadUrls(currentFolder, 'up');
 })
 
 $('.pop-down').on('click', () => {
-  console.log('pop-down');
+  event.preventDefault()
+  loadUrls(currentFolder, 'down');
 })
 
-$('.date-up').on('click', () => {
-  console.log('date-up');
-})
 
 $('.date-up').on('click', () => {
-  console.log('date-up');
+  event.preventDefault()
+  loadUrls(currentFolder, 'dUp')
+})
+
+$('.date-down').on('click', () => {
+  event.preventDefault()
+  loadUrls(currentFolder, 'dDown')
 })

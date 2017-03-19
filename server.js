@@ -43,7 +43,7 @@ app.get('/api/folders', (request, response) => {
       response.status(200).json(folders);
     })
     .catch((error) => {
-      console.error('error stuff shit team');
+      console.error('something wrong w db (get folders)');
     })
 })
 
@@ -69,14 +69,15 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
         response.status(200).json(urls);
       })
       .catch((error) => {
-        console.error('error stuff shit team');
+        console.error('something wrong w db (get urls)');
   })
 })
 
 app.post('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
   const urlName = request.body.urlName
-  const date = Date.now()
+  const d = new Date()
+  const date = d.toString()
   const clicks = 0
   const urls = {folderId, urlName, date, clicks}
   database('urls').insert(urls)
@@ -105,7 +106,6 @@ app.patch('/api/folders/:folderId/urls', (request, response) => {
   })
 
 })
-
 
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`)
