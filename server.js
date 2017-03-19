@@ -77,10 +77,10 @@ app.post('/api/folders/:folderId/urls', (request, response) => {
 })
 
 app.patch('/api/folders/:folderId/urls', (request, response) => {
-  database('urls').increment('clicks', 1).where('id', request.params.folderId)
-  .then((response) => {
-    database('urls').select()
-    .then((urls) => {
+  database('urls').increment('clicks', 1).where('id', request.body.urlId)
+  .then(clicks => {
+    database('urls').where('folderId', request.params.folderId).select()
+    .then(urls => {
       response.status(200).json(urls);
     })
     .catch(error => {
@@ -88,6 +88,7 @@ app.patch('/api/folders/:folderId/urls', (request, response) => {
       console.error('somethings wrong with db (patch)');
     })
   })
+
 })
 
 
