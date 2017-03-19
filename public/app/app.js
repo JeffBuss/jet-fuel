@@ -146,12 +146,17 @@ const loadUrls = () => {
 }
 
 $('.pop-up').on('click', () => {
-  console.log('pop-up');
+  event.preventDefault()
+  console.log('pop up', currentFolder)
+   loadUrls(currentFolder, 'mostPopular');
 })
 
 $('.pop-down').on('click', () => {
-  console.log('pop-down');
+  event.preventDefault()
+  console.log('pop down', currentFolder)
+   loadUrls(currentFolder, 'leastPopular');
 })
+
 
 $('.date-up').on('click', () => {
   console.log('date-up');
