@@ -132,7 +132,7 @@ const updateClicks = (e) => {
 
 
 
-const loadUrls = () => {
+const loadUrls = (cf, filter) => {
   if(currentFolder){
     fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'GET',
@@ -141,20 +141,40 @@ const loadUrls = () => {
     },
   })
   .then(response => response.json())
-  .then((response) => displayUrls(response))
+  .then((response) => {
+    if (filter === 'up') {
+      response = filterPop(response, filter)
+    } else if (filter === 'down') {
+      response = filterPop(response, filter)
+    } else {
+      displayUrls(response)
+    }
+    displayUrls(response)
+  })
   }
+}
+
+const filterPop = (urls, filter) => {
+  let sortedUrls = urls.sort((a,b) => {
+    if(filter === 'up') {
+      return b.clicks - a.clicks
+    } else {
+      return a.clicks - b.clicks
+    }
+  })
+  return sortedUrls
 }
 
 $('.pop-up').on('click', () => {
   event.preventDefault()
   console.log('pop up', currentFolder)
-   loadUrls(currentFolder, 'mostPopular');
+   loadUrls(currentFolder, 'up');
 })
 
 $('.pop-down').on('click', () => {
   event.preventDefault()
   console.log('pop down', currentFolder)
-   loadUrls(currentFolder, 'leastPopular');
+   loadUrls(currentFolder, 'down');
 })
 
 

@@ -2669,7 +2669,7 @@ var updateClicks = function updateClicks(e) {
   });
 };
 
-var loadUrls = function loadUrls() {
+var loadUrls = function loadUrls(cf, filter) {
   if (currentFolder) {
     fetch('/api/folders/' + currentFolder + '/urls', {
       method: 'GET',
@@ -2679,21 +2679,39 @@ var loadUrls = function loadUrls() {
     }).then(function (response) {
       return response.json();
     }).then(function (response) {
-      return displayUrls(response);
+      if (filter === 'up') {
+        response = filterPop(response, filter);
+      } else if (filter === 'down') {
+        response = filterPop(response, filter);
+      } else {
+        displayUrls(response);
+      }
+      displayUrls(response);
     });
   }
+};
+
+var filterPop = function filterPop(urls, filter) {
+  var sortedUrls = urls.sort(function (a, b) {
+    if (filter === 'up') {
+      return b.clicks - a.clicks;
+    } else {
+      return a.clicks - b.clicks;
+    }
+  });
+  return sortedUrls;
 };
 
 $('.pop-up').on('click', function () {
   event.preventDefault();
   console.log('pop up', currentFolder);
-  loadUrls(currentFolder, 'mostPopular');
+  loadUrls(currentFolder, 'up');
 });
 
 $('.pop-down').on('click', function () {
   event.preventDefault();
   console.log('pop down', currentFolder);
-  loadUrls(currentFolder, 'leastPopular');
+  loadUrls(currentFolder, 'down');
 });
 
 $('.date-up').on('click', function () {

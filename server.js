@@ -43,7 +43,7 @@ app.get('/api/folders', (request, response) => {
       response.status(200).json(folders);
     })
     .catch((error) => {
-      console.error('error stuff shit team');
+      console.error('something wrong w db (get folders)');
     })
 })
 
@@ -69,7 +69,7 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
         response.status(200).json(urls);
       })
       .catch((error) => {
-        console.error('error stuff shit team');
+        console.error('something wrong w db (get urls)');
   })
 })
 
