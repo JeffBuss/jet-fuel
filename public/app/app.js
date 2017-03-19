@@ -101,7 +101,7 @@ const displayUrls = (folders) => {
       // let clicked = 0
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id} </a> visits: ${clicked}</li>`
+        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id} </a> visits: ${el.clicks}</li>`
       )
     })
   }
@@ -110,22 +110,22 @@ const displayUrls = (folders) => {
 $('.url-section').on('click', 'li', (e) => {
   console.log('id',e.target.id)
   console.log('clicked', clicked)
-  updateClicks()
+  updateClicks(e)
 })
 
-const updateClicks = () => {
-  console.log('clicked me')
+const updateClicks = (e) => {
+  console.log(e.target.id)
     fetch(`/api/folders/${currentFolder}/urls`, {
       method: 'PATCH',
       headers: {
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        folderId: currentFolder,
+        urlId: e.target.id,
       })
     })
     .then(response => response.json())
-    .then(response => console.log('patch request', response))
+    .then(response => displayUrls(response))
 }
 
 const clearUrls = () => {

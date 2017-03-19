@@ -2639,7 +2639,7 @@ var displayUrls = function displayUrls(folders) {
     folders.map(function (el) {
       // let clicked = 0
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + ' </a> visits: ' + clicked + '</li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + ' </a> visits: ' + el.clicks + '</li>');
     });
   }
 };
@@ -2647,23 +2647,23 @@ var displayUrls = function displayUrls(folders) {
 $('.url-section').on('click', 'li', function (e) {
   console.log('id', e.target.id);
   console.log('clicked', clicked);
-  updateClicks();
+  updateClicks(e);
 });
 
-var updateClicks = function updateClicks() {
-  console.log('clicked me');
+var updateClicks = function updateClicks(e) {
+  console.log(e.target.id);
   fetch('/api/folders/' + currentFolder + '/urls', {
     method: 'PATCH',
     headers: {
       'content-type': 'application/json'
     },
     body: JSON.stringify({
-      folderId: currentFolder
+      urlId: e.target.id
     })
   }).then(function (response) {
     return response.json();
   }).then(function (response) {
-    return console.log('patch request', response);
+    return displayUrls(response);
   });
 };
 
