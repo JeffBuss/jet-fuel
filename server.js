@@ -22,6 +22,21 @@ app.get('/', (request, response) => {
  })
 })
 
+app.get('/:id', (request, response) => {
+  const id = request.params.id
+  database('urls').where('id', request.params.id).increment('clicks', 1)
+  .then(() => {
+    database('urls').where('id', id).select()
+        .then((url) => {
+          console.log(url);
+          response.redirect(`http://${url[0].urlName}`);
+        })
+        .catch((error) => {
+          console.error(error)
+        });
+    })
+})
+
 app.get('/api/folders', (request, response) => {
   database('folders').select()
     .then((folders) => {
