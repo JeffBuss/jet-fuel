@@ -1,124 +1,171 @@
+process.env.NODE_ENV = 'test'
+const config = require('../knexfile.js')['test']
+const knex = require('knex')(config)
+
 const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
+const configuration = require('../knexfile')['test'];
+const database = require('knex')(configuration);
 
-const app = require('../server.js');
+const app = require('../server.js')
 
 chai.use(chaiHttp);
 
 describe('Server', () => {
   it('should exist', () => {
     expect(app).to.exist;
-  });
+  })
 
   describe('GET /', () => {
     it('should return html', (done) => {
       chai.request(app)
       .get('/')
-      .end((err, res) => {
-         if (err) { done(err); }
-         expect(res).to.have.status(200);
-         expect(res).to.be.html;
-         done();
-      });
-    });
-  })
-
-  describe('GET /api/folders', () => {
-    beforeEach((done) =>{
-    const folders = [
-      {"folders":
-        [{"id":1489689105802,"folderName":"Books"},
-        {"id":1489689108670,"folderName":"Movies"},
-        {"id":1489689112632,"folderName":"Music"},
-        {"id":1489689121440,"folderName":"Podcasts"}
-      ]}
-    ];
-    app.locals.folders = folders;
-    done();
-  });
-    it('should return all folders', () => {
-      chai.request(app)
-      .get('/api/folders')
-      .end((err, res) => {
-        if (err) { done(err) }
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('array');
-        expect(res.body.length).to.equal(4);
-        expect(res.body[0]).to.have.property('folders');
+      .end((err,res) => {
+        if(err) { done(err); }
+        expect(res).to.have.status(200)
+        expect(res).to.be.html
         done();
       })
     })
   })
 
-  describe('GET /api/folders/:id', function() {
-  beforeEach(function(done){
-    const urls =
-    {"urls":
-      [{"id":1,"urlName":"http://www.books.com"},
-    ]}
-    app.locals.urls = urls;
-    done();
-  });
+  describe('GET /api/folders', () => {
+    beforeEach(function(done) {
+      knex.migrate.rollback()
+      .then(function() {
+        knex.migrate.latest()
+        .then(function() {
+          return database.seed.run()
+          .then(function() {
+            done();
+          })
+        })
+      })
+    })
 
-  afterEach(function(done){
-    app.locals.urls = [];
-    done();
-  });
+    afterEach((done) => {
+      knex.migrate.rollback()
+      .then(() => {
+        done()
+      })
+    })
 
-  context('if url is found', function(){
-    it.skip('should return a specific url', function(done) {
-      chai.request(app)
-      .get('/api/folders/1/url')
-      .end(function(err, res) {
-        if (err) { done(err); }
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('object');
-        expect(res.body).to.have.property('urlName');
-        expect(res.body.type).to.equal('http://www.books.com');
-        done();
-      });
-    });
-  });
-
-  context('if no url is found', function(){
-    it.skip('should return a 404', function(done) {
-      chai.request(app)
-      .get('/api/folders/1/url')
-      .end(function(err, res) {
-        expect(res).to.have.status(404);
-        expect(res.body).to.be.a('object');
-        done();
-      });
-    });
-  });
-});
-
-  describe('GET /api/urls', () => {
-    beforeEach((done) =>{
-    const urls = [
-      {"urls":
-        [{"id":1489689105802,"urlName":"http://www.books.com"},
-        {"id":1489689108670,"urlName":"http://www.movies.com"},
-        {"id":1489689112632,"urlName":"http://www.music.com"},
-        {"id":1489689121440,"urlName":"http://www.podcasts.com"}
-      ]}
-    ];
-    app.locals.urls = urls;
-    done();
-  });
-    it('should return all urls', () => {
+    it('should return all folders', (done) => {
       chai.request(app)
       .get('/api/folders')
-      .end((err, res) => {
-        if (err) { done(err) }
-        expect(res).to.have.status(200);
-        expect(res).to.be.json;
-        expect(res.body).to.be.a('array');
-        expect(res.body.length).to.equal(4);
-        expect(res.body[0]).to.have.property('folders');
+      .end((err,res) => {
+        if(err) {done(err)}
+        expect(res).to.have.status(200)
+        expect(res).to.be.json
+        expect(res.body).to.be.a('array')
+        expect(res.body).to.have.length(2)
+        done()
+      })
+    })
+  })
+
+  describe('GET /api/folders/:folderId/urls',() => {
+    beforeEach(function(done) {
+      knex.migrate.rollback()
+      .then(function() {
+        knex.migrate.latest()
+        .then(function() {
+          return database.seed.run()
+          .then(function() {
+            done();
+          })
+        })
+      })
+    })
+
+    afterEach((done) => {
+      knex.migrate.rollback()
+      .then(() => {
+        done();
+      })
+    })
+
+    it('should return all urls that belong to that folder', (done)=>{
+      chai.request(app)
+      .get('/api/folders/1/urls')
+      .end((err,res) => {
+        if(err) {done(err)}
+        expect(res).to.have.status(200)
+        expect(res).to.be.json
+        expect(res.body).to.be.a('array')
+        done();
+      })
+    })
+  })
+
+  describe('POST /api/folders/:folderId/urls', () => {
+    beforeEach(function(done) {
+      knex.migrate.rollback()
+      .then(function() {
+        knex.migrate.latest()
+        .then(function() {
+          return database.seed.run()
+          .then(function() {
+            done();
+          })
+        })
+      })
+    })
+
+    afterEach((done) => {
+      knex.migrate.rollback()
+      .then(() => {
+        done()
+      })
+    })
+
+    it('should add a url to the url array', (done) => {
+      chai.request(app)
+      .post('/api/folders/1111/urls')
+      .send({
+        id: 1111,
+        folderId: 1111111,
+        date: '1111111',
+        urlName:'http://www.music.com',
+        clicks: 1
+      })
+      .end((err,res) => {
+        if(err){ done(err) }
+        expect(res).to.have.status(200)
+        done();
+      })
+    })
+  })
+
+  describe('POST /api/folders', () => {
+    beforeEach(function(done) {
+      knex.migrate.rollback()
+      .then(function() {
+        knex.migrate.latest()
+        .then(function() {
+          return database.seed.run()
+          .then(function() {
+            done();
+          })
+        })
+      })
+    })
+
+    afterEach(() => {
+      knex.migrate.rollback()
+      .then(() => {
+        done();
+      })
+    })
+
+    it('should add a folder to the array', () => {
+      chai.request(app)
+      .post('/api/folders')
+      .send({ name:'Music' })
+      .end((err,res) => {
+        if(err){done(err);}
+        expect(res).to.have.status(200)
         done();
       })
     })
