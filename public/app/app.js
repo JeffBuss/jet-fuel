@@ -107,7 +107,11 @@ const displayUrls = (folders) => {
     folders.map((el) => {
       console.log('el?', el)
       $('.url-list').append(
-        `<li class='${el.urlName}' id='${el.id}'><a target='_blank' href=${el.urlName}>${el.id}</a> visits: ${el.clicks} <p>${el.date}</p></li>`
+        `<li class='${el.urlName}' id='${el.id}'>
+          <a target='_blank' id='${el.id}' href=${el.urlName}>
+            ${el.id}
+          </a> visits: ${el.clicks} <p>${el.date}</p>
+        </li>`
       )
     })
   }
@@ -118,12 +122,10 @@ const clearUrls = () => {
 }
 
 $('.url-section').on('click', 'li', (e) => {
-  console.log('id',e.target.id)
   updateClicks(e)
 })
 
 const updateClicks = (e) => {
-  console.log(e.target.id)
     fetch(`/api/folders/${currentFolder}/urls`, {
       method: 'PATCH',
       headers: {

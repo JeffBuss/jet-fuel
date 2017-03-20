@@ -2646,7 +2646,7 @@ var displayUrls = function displayUrls(folders) {
   if (folders.length > 0) {
     folders.map(function (el) {
       console.log('el?', el);
-      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'><a target=\'_blank\' href=' + el.urlName + '>' + el.id + '</a> visits: ' + el.clicks + ' <p>' + el.date + '</p></li>');
+      $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'>\n          <a target=\'_blank\' id=\'' + el.id + '\' href=' + el.urlName + '>\n            ' + el.id + '\n          </a> visits: ' + el.clicks + ' <p>' + el.date + '</p>\n        </li>');
     });
   }
 };
@@ -2656,12 +2656,10 @@ var clearUrls = function clearUrls() {
 };
 
 $('.url-section').on('click', 'li', function (e) {
-  console.log('id', e.target.id);
   updateClicks(e);
 });
 
 var updateClicks = function updateClicks(e) {
-  console.log(e.target.id);
   fetch('/api/folders/' + currentFolder + '/urls', {
     method: 'PATCH',
     headers: {
