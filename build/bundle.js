@@ -2581,7 +2581,6 @@ loadFolders();
 
 var displayFolders = function displayFolders(folders) {
   clearFolders();
-  console.log('folders', folders);
   folders.map(function (el) {
     $('.url-folder').append('<li class=\'' + el.folderName + ' btn folder-list\' id=\'' + el.id + '\'>' + el.folderName + '</li>');
   });

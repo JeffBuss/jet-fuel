@@ -1,5 +1,5 @@
-require('../reset.css');
-require ('../styles.scss');
+require('../reset.css')
+require ('../styles.scss')
 
 const urlBtn = $('.url-btn')
 const folderBtn = $('.folder-btn')
@@ -42,7 +42,6 @@ loadFolders()
 
 const displayFolders = (folders) => {
   clearFolders()
-  console.log('folders', folders)
   folders.map((el) => {
     $('.url-folder').append(
       `<li class='${el.folderName} btn folder-list' id='${el.id}'>${el.folderName}</li>`
@@ -51,7 +50,7 @@ const displayFolders = (folders) => {
 }
 
 const clearFolders = () => {
-  $('.url-folder').empty();
+  $('.url-folder').empty()
 }
 
 $('.url-folder').on('click', 'li', (e) => {
@@ -76,7 +75,7 @@ urlBtn.on('click', () => {
 })
 
 const cleanUrls = (url) => {
-  if(url.slice(0,7) === "http://" || url.slice(0,8) === "https://"){
+  if(url.slice(0,7) === "http://" || url.slice(0,8) === "https://") {
     return url;
   } else {
     return "http://" + url;
@@ -118,7 +117,7 @@ const displayUrls = (folders) => {
 }
 
 const clearUrls = () => {
-  $('.url-list').empty();
+  $('.url-list').empty()
 }
 
 $('.url-section').on('click', 'li', (e) => {
@@ -168,9 +167,9 @@ const loadUrls = (cf, filter) => {
 const filterPop = (urls, filter) => {
   let sortedUrls = urls.sort((a,b) => {
     if(filter === 'up') {
-      return b.clicks - a.clicks;
+      return b.clicks - a.clicks
     } else {
-      return a.clicks - b.clicks;
+      return a.clicks - b.clicks
     }
   })
   return sortedUrls;
@@ -184,17 +183,17 @@ const filterDate = (urls, filter) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime()
     }
   })
-  return sortedUrls;
+  return sortedUrls
 }
 
 $('.pop-up').on('click', () => {
   event.preventDefault()
-  loadUrls(currentFolder, 'up');
+  loadUrls(currentFolder, 'up')
 })
 
 $('.pop-down').on('click', () => {
   event.preventDefault()
-  loadUrls(currentFolder, 'down');
+  loadUrls(currentFolder, 'down')
 })
 
 
