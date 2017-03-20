@@ -1,7 +1,7 @@
 module.exports = {
   development: {
     client: 'pg',
-    connection:'postgres://localhost/jetfuel4',
+    connection:'postgres://localhost/jetfuel',
     migrations: {
       directory: './db/migrations'
     },
@@ -13,7 +13,7 @@ module.exports = {
 
   test: {
     client: 'pg',
-    connection:'postgres://localhost/jetfuel4-test',
+    connection:'postgres://localhost/jetfuel-test',
     migrations: {
       directory: './db/migrations'
     },
