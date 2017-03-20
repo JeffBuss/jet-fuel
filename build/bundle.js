@@ -2622,7 +2622,6 @@ var cleanUrls = function cleanUrls(url) {
 };
 
 var pushURL = function pushURL(input) {
-  console.log('input', input);
   fetch('/api/folders/' + currentFolder + '/urls', {
     method: 'POST',
     headers: {
@@ -2644,7 +2643,6 @@ var displayUrls = function displayUrls(folders) {
   clearUrls();
   if (folders.length > 0) {
     folders.map(function (el) {
-      console.log('el?', el);
       $('.url-list').append('<li class=\'' + el.urlName + '\' id=\'' + el.id + '\'>\n          <a target=\'_blank\' id=\'' + el.id + '\' href=' + el.urlName + '>\n            ' + el.id + '\n          </a> visits: ' + el.clicks + ' <p>' + el.date + '</p>\n        </li>');
     });
   }

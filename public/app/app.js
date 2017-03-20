@@ -83,7 +83,6 @@ const cleanUrls = (url) => {
 };
 
 const pushURL = (input) => {
-  console.log('input', input)
   fetch(`/api/folders/${currentFolder}/urls`, {
     method: 'POST',
     headers: {
@@ -104,7 +103,6 @@ const displayUrls = (folders) => {
   clearUrls()
   if(folders.length > 0) {
     folders.map((el) => {
-      console.log('el?', el)
       $('.url-list').append(
         `<li class='${el.urlName}' id='${el.id}'>
           <a target='_blank' id='${el.id}' href=${el.urlName}>
