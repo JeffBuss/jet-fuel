@@ -31,13 +31,13 @@ describe('Server', () => {
   })
 
   describe('GET /api/folders', () => {
-    beforeEach(function(done) {
+    beforeEach((done) => {
       knex.migrate.rollback()
-      .then(function() {
+      .then(() => {
         knex.migrate.latest()
-        .then(function() {
+        .then(() => {
           return database.seed.run()
-          .then(function() {
+          .then(() => {
             done();
           })
         })
@@ -66,13 +66,13 @@ describe('Server', () => {
   })
 
   describe('GET /api/folders/:folderId/urls',() => {
-    beforeEach(function(done) {
+    beforeEach((done) => {
       knex.migrate.rollback()
-      .then(function() {
+      .then(() => {
         knex.migrate.latest()
-        .then(function() {
+        .then(() => {
           return database.seed.run()
-          .then(function() {
+          .then(() => {
             done();
           })
         })
@@ -100,13 +100,13 @@ describe('Server', () => {
   })
 
   describe('POST /api/folders/:folderId/urls', () => {
-    beforeEach(function(done) {
+    beforeEach((done) => {
       knex.migrate.rollback()
-      .then(function() {
+      .then(() => {
         knex.migrate.latest()
-        .then(function() {
+        .then(() => {
           return database.seed.run()
-          .then(function() {
+          .then(() => {
             done();
           })
         })
@@ -139,13 +139,13 @@ describe('Server', () => {
   })
 
   describe('POST /api/folders', () => {
-    beforeEach(function(done) {
+    beforeEach((done) => {
       knex.migrate.rollback()
-      .then(function() {
+      .then(() => {
         knex.migrate.latest()
-        .then(function() {
+        .then(() => {
           return database.seed.run()
-          .then(function() {
+          .then(() => {
             done();
           })
         })
