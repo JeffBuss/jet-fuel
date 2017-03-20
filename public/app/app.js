@@ -70,11 +70,18 @@ $('.url-folder').on('click', 'li', (e) => {
 
 urlBtn.on('click', () => {
   event.preventDefault()
-  let input = $('.url-input').val()
+  let input = cleanUrls($('.url-input').val())
   pushURL(input)
   loadUrls()
 })
 
+const cleanUrls = (url) => {
+  if(url.slice(0,7) === "http://" || url.slice(0,8) === "https://"){
+    return url;
+  } else {
+    return "http://" + url;
+  }
+};
 
 const pushURL = (input) => {
   console.log('input', input)
