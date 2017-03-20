@@ -2609,10 +2609,18 @@ $('.url-folder').on('click', 'li', function (e) {
 
 urlBtn.on('click', function () {
   event.preventDefault();
-  var input = $('.url-input').val();
+  var input = cleanUrls($('.url-input').val());
   pushURL(input);
   loadUrls();
 });
+
+var cleanUrls = function cleanUrls(url) {
+  if (url.slice(0, 7) === "http://" || url.slice(0, 8) === "https://") {
+    return url;
+  } else {
+    return "http://" + url;
+  }
+};
 
 var pushURL = function pushURL(input) {
   console.log('input', input);
