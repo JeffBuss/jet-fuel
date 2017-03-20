@@ -25,7 +25,7 @@ describe('Server', () => {
         if(err) { done(err); }
         expect(res).to.have.status(200)
         expect(res).to.be.html
-        done();
+        done()
       })
     })
   })
@@ -38,7 +38,7 @@ describe('Server', () => {
         .then(() => {
           return database.seed.run()
           .then(() => {
-            done();
+            done()
           })
         })
       })
@@ -73,7 +73,7 @@ describe('Server', () => {
         .then(() => {
           return database.seed.run()
           .then(() => {
-            done();
+            done()
           })
         })
       })
@@ -82,7 +82,7 @@ describe('Server', () => {
     afterEach((done) => {
       knex.migrate.rollback()
       .then(() => {
-        done();
+        done()
       })
     })
 
@@ -94,7 +94,7 @@ describe('Server', () => {
         expect(res).to.have.status(200)
         expect(res).to.be.json
         expect(res.body).to.be.a('array')
-        done();
+        done()
       })
     })
   })
@@ -107,7 +107,7 @@ describe('Server', () => {
         .then(() => {
           return database.seed.run()
           .then(() => {
-            done();
+            done()
           })
         })
       })
@@ -133,7 +133,7 @@ describe('Server', () => {
       .end((err,res) => {
         if(err){ done(err) }
         expect(res).to.have.status(200)
-        done();
+        done()
       })
     })
   })
@@ -146,7 +146,7 @@ describe('Server', () => {
         .then(() => {
           return database.seed.run()
           .then(() => {
-            done();
+            done()
           })
         })
       })
@@ -155,7 +155,7 @@ describe('Server', () => {
     afterEach(() => {
       knex.migrate.rollback()
       .then(() => {
-        done();
+        done()
       })
     })
 
@@ -166,7 +166,7 @@ describe('Server', () => {
       .end((err,res) => {
         if(err){done(err);}
         expect(res).to.have.status(200)
-        done();
+        done()
       })
     })
   })

@@ -3,9 +3,9 @@ const app = express()
 const bodyParser = require('body-parser')
 const fs = require('fs')
 
-const environment = process.env.NODE_ENV || 'development';
-const configuration = require('./knexfile')[environment];
-const database = require('knex')(configuration);
+const environment = process.env.NODE_ENV || 'development'
+const configuration = require('./knexfile')[environment]
+const database = require('knex')(configuration)
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -13,8 +13,8 @@ app.use(express.static('build'))
 
 app.set('port', process.env.PORT || 3000)
 app.locals.title = 'Jet Fuel'
-app.locals.folders = [];
-app.locals.urls = [];
+app.locals.folders = []
+app.locals.urls = []
 
 app.get('/', (request, response) => {
   fs.readFile(`${__dirname}/index.html`, (err, file) => {
@@ -28,22 +28,19 @@ app.get('/:id', (request, response) => {
   .then(() => {
     database('urls').where('id', id).select()
         .then((url) => {
-          console.log(url);
           response.redirect(`http://${url[0].urlName}`);
         })
         .catch((error) => {
-          console.error(error)
-        });
+        })
     })
 })
 
 app.get('/api/folders', (request, response) => {
   database('folders').select()
     .then((folders) => {
-      response.status(200).json(folders);
+      response.status(200).json(folders)
     })
     .catch((error) => {
-      console.error('something wrong w db (get folders)');
     })
 })
 
@@ -58,7 +55,7 @@ app.post('/api/folders', (request, response) => {
       })
       .catch((error) => {
         console.log('something is wrong w db (folders)')
-  })
+    })
   })
 })
 
@@ -66,10 +63,10 @@ app.get('/api/folders/:folderId/urls', (request, response) => {
   const { folderId } = request.params
     database('urls').where('folderId', folderId).select()
       .then((urls) => {
-        response.status(200).json(urls);
+        response.status(200).json(urls)
       })
       .catch((error) => {
-        console.error('something wrong w db (get urls)');
+        console.error('something wrong w db (get urls)')
   })
 })
 
@@ -86,9 +83,9 @@ app.post('/api/folders/:folderId/urls', (request, response) => {
       .then((urls) => {
         response.status(200).json(urls)
       })
-  .catch((error) => {
-    console.log('something is wrong w db (urls)')
-  })
+    .catch((error) => {
+      console.log('something is wrong w db (urls)')
+    })
   })
 })
 
@@ -100,8 +97,7 @@ app.patch('/api/folders/:folderId/urls', (request, response) => {
       response.status(200).json(urls);
     })
     .catch(error => {
-      console.log(error);
-      console.error('somethings wrong with db (patch)');
+      console.error('somethings wrong with db (patch)')
     })
   })
 
